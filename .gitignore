@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.agent-budget/
+fixtures/**/.agent-budget/
+fixtures/**/node_modules/
+coverage/
+.DS_Store

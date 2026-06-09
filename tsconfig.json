@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "rootDir": ".",
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "declaration": true
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts", "hooks/**/*.ts"],
+  "exclude": ["dist", "node_modules", "fixtures/**/node_modules"]
+}

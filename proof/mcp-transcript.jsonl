@@ -1,0 +1,6 @@
+{"tool":"abg_policy","response":{"summary":"Current Agent Budget policy."}}
+{"tool":"abg_repo_index","response":{"summary":"ok"}}
+{"tool":"abg_repo_dossier","response":{"summary":"ok"}}
+{"tool":"abg_read_budgeted","response":{"summary":"Returned full file src/chart/ChartTooltip.tsx."}}
+{"tool":"abg_run_summary","response":{"summary":"Command: node -e console.error('FAIL src/chart/ChartTooltip.test.tsx\\nx updates stale chart tooltip value after sensor reconnect'); process.exit(1)\nExit code: 1\nDuration: 31ms\nRaw log: /Users/psjostrom/code/agent-budget/fixtures/react-ts-app/.agent-budget/logs/2026-06-09T12-33-19-450Z-test.log\n\nFindings:\n- [error] src/chart/ChartTooltip.test.tsx: Failing test"}}
+{"tool":"abg_budget_report","response":{"summary":"4 operations logged. Token counts are estimated as chars / 4."}}

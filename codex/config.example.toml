@@ -1,0 +1,34 @@
+# Enable hooks if supported by your Codex version.
+[features]
+hooks = true
+
+[mcp_servers.agent_budget]
+command = "pnpm"
+args = ["agent-budget", "mcp", "--repo", "."]
+startup_timeout_sec = 20
+tool_timeout_sec = 120
+enabled = true
+required = true
+enabled_tools = [
+  "abg_policy",
+  "abg_repo_index",
+  "abg_repo_dossier",
+  "abg_search",
+  "abg_read_budgeted",
+  "abg_run_summary",
+  "abg_git_diff_summary",
+  "abg_budget_report",
+  "abg_local_scout"
+]
+default_tools_approval_mode = "prompt"
+
+[mcp_servers.agent_budget_global]
+command = "agent-budget"
+args = ["mcp", "--repo", "."]
+startup_timeout_sec = 20
+tool_timeout_sec = 120
+enabled = false
+
+# Codex config keys can vary by version. If your Codex build rejects
+# required, enabled_tools, or default_tools_approval_mode, remove that key
+# and keep the command/args MCP server stanza.

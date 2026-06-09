@@ -1,0 +1,46 @@
+{
+  "repoRoot": ".",
+  "ignore": [
+    "node_modules/**",
+    ".git/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    "ios/Pods/**",
+    "android/.gradle/**",
+    "**/*.lock"
+  ],
+  "index": {
+    "maxFileBytes": 300000,
+    "extensions": [".ts", ".tsx", ".js", ".jsx", ".json", ".md", ".kt", ".kts"]
+  },
+  "budgets": {
+    "defaultDossierChars": 12000,
+    "defaultReadChars": 4000,
+    "maxToolOutputChars": 8000,
+    "maxRawLogBytes": 5000000
+  },
+  "commands": {
+    "allowed": [
+      "pnpm test",
+      "pnpm vitest",
+      "pnpm tsc",
+      "npm test",
+      "yarn test",
+      "npx tsc",
+      "git diff",
+      "git status"
+    ],
+    "timeoutMs": 120000
+  },
+  "security": {
+    "redactSecrets": true,
+    "blockDangerousShell": true
+  },
+  "localScout": {
+    "enabled": false,
+    "command": null,
+    "timeoutMs": 60000,
+    "maxOutputChars": 6000
+  }
+}

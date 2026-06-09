@@ -1,0 +1,33 @@
+import fs from "node:fs";
+import path from "node:path";
+import { describe, expect, it } from "vitest";
+import { budgetReport } from "../../src/budget/events.js";
+import { readBudgeted } from "../../src/commands/read.js";
+import { runSummary } from "../../src/commands/run.js";
+import { generateDossier } from "../../src/dossier/dossier.js";
+import { buildIndex } from "../../src/indexer/indexer.js";
+
+const fixture = path.resolve("fixtures/react-ts-app");
+
+describe("e2e proof workflow", () => {
+  it("calls required tool handlers and stores transcript", async () => {
+    fs.mkdirSync("proof", { recursive: true });
+    fs.writeFileSync("proof/mcp-transcript.jsonl", "");
+    const index = await buildIndex(fixture);
+    const dossier = await generateDossier(fixture, "Fix stale chart tooltip value after sensor reconnect", 12000);
+    const calls = [
+      ["abg_policy", { summary: "Current Agent Budget policy." }],
+      ["abg_repo_index", index],
+      ["abg_repo_dossier", dossier],
+      ["abg_read_budgeted", readBudgeted(fixture, "src/chart/ChartTooltip.tsx", 4000, "tooltip reconnect")],
+      ["abg_run_summary", await runSummary(fixture, "test", ["node", "-e", "console.error('FAIL src/chart/ChartTooltip.test.tsx\\nx updates stale chart tooltip value after sensor reconnect'); process.exit(1)"], true)],
+      ["abg_budget_report", budgetReport(fixture)]
+    ] as const;
+    for (const [tool, response] of calls) {
+      fs.appendFileSync("proof/mcp-transcript.jsonl", JSON.stringify({ tool, response: { summary: (response as any).summary ?? "ok" } }) + "\n");
+    }
+    expect(index.stats.fileCount).toBeGreaterThan(4);
+    expect(dossier.markdown).toContain("ChartTooltip.tsx");
+    expect(fs.existsSync("proof/mcp-transcript.jsonl")).toBe(true);
+  });
+});

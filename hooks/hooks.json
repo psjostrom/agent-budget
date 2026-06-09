@@ -1,0 +1,4 @@
+{
+  "preToolUse": "node dist/hooks/pre-tool-use-policy.js",
+  "postToolUse": "node dist/hooks/post-tool-use-policy.js"
+}
