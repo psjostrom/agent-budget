@@ -1,0 +1,11 @@
+{
+  "name": "agent-budget",
+  "description": "Local-first context and cost controls for coding agents.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Agent Budget"
+  },
+  "homepage": "https://github.com/psjostrom/agent-budget",
+  "repository": "https://github.com/psjostrom/agent-budget",
+  "license": "MIT"
+}

@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "agent_budget": {
+      "command": "${CODEX_PLUGIN_ROOT}/bin/agent-budget-mcp",
+      "args": ["--repo", "${CODEX_PROJECT_DIR:-.}"],
+      "startup_timeout_sec": 20,
+      "tool_timeout_sec": 120,
+      "enabled": true,
+      "required": false,
+      "enabled_tools": [
+        "abg_policy",
+        "abg_repo_index",
+        "abg_repo_dossier",
+        "abg_search",
+        "abg_read_budgeted",
+        "abg_run_summary",
+        "abg_git_diff_summary",
+        "abg_budget_report",
+        "abg_local_scout"
+      ],
+      "default_tools_approval_mode": "prompt"
+    }
+  }
+}

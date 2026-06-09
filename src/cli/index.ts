@@ -12,6 +12,7 @@ import { generateDossier, searchIndex } from "../dossier/dossier.js";
 import { compareCost, gitDiffSummary } from "../diff/diff.js";
 import { buildIndex } from "../indexer/indexer.js";
 import { startMcp } from "../mcp/server.js";
+import { validateBundledPlugins } from "../plugins/validate.js";
 import { resolveRepo, stateDir } from "../utils/path.js";
 
 function outputLength(data: unknown): number {
@@ -114,6 +115,7 @@ program.command("compare-cost").option("--repo <repo>", ".").option("--base <ref
 });
 
 program.command("budget").option("--repo <repo>", ".").action((opts) => print(budgetReport(resolveRepo(opts.repo))));
+program.command("validate-plugins").option("--repo <repo>", ".").action((opts) => print(validateBundledPlugins(resolveRepo(opts.repo))));
 program.command("mcp").option("--repo <repo>", ".").action((opts) => startMcp(resolveRepo(opts.repo)));
 program.command("proof").option("--repo <repo>", ".").action((opts) => {
   const repoRoot = resolveRepo(opts.repo);

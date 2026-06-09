@@ -80,6 +80,7 @@ agent-budget dossier "Fix stale chart tooltip value after sensor reconnect" --re
 agent-budget read src/chart/ChartTooltip.tsx --repo . --budget 4000
 agent-budget run --repo . --kind test -- pnpm test
 agent-budget budget --repo .
+agent-budget validate-plugins --repo .
 ```
 
 Local state is written to `.agent-budget/` in the target repo:
@@ -271,6 +272,14 @@ Reports logged operations, estimated token output, largest operations, and the l
 
 Token estimates use `chars / 4`. Treat them as directional, not billing-grade.
 
+### `validate-plugins`
+
+```bash
+agent-budget validate-plugins --repo .
+```
+
+Validates the bundled Codex and Claude plugin packages with the project's TypeScript/Zod schemas. This checks manifests, MCP config, launchers, executable bits, and skill files without requiring Python.
+
 ### `mcp`
 
 ```bash
@@ -375,6 +384,44 @@ See:
 - `docs/mcp-tools.md`
 - `codex/config.example.toml`
 - `skills/agent-budget/SKILL.md`
+
+## Plugins
+
+This repository includes experimental plugin packages for both Codex and Claude Code:
+
+```text
+plugins/
+  codex/
+    .codex-plugin/plugin.json
+    .mcp.json
+    bin/agent-budget-mcp
+    skills/agent-budget/SKILL.md
+  claude/
+    .claude-plugin/plugin.json
+    .mcp.json
+    bin/agent-budget-mcp
+    skills/agent-budget/SKILL.md
+```
+
+The shared implementation still lives in `src/`. Each plugin is a thin adapter that launches the built MCP server:
+
+```bash
+pnpm build
+```
+
+Claude Code local test:
+
+```bash
+claude --plugin-dir ./plugins/claude
+```
+
+For Codex, add `plugins/codex` to a local or repo marketplace while developing. The plugin includes a manifest, skill, and MCP config. Before publishing to a marketplace, validate the current host-specific MCP path substitutions because plugin-bundled MCP path variables differ between agent hosts.
+
+Validate both bundled plugins with:
+
+```bash
+agent-budget validate-plugins --repo .
+```
 
 ## Ranking Policy
 

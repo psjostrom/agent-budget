@@ -1,0 +1,31 @@
+{
+  "name": "agent-budget",
+  "version": "0.1.0",
+  "description": "Local-first context and cost controls for coding agents.",
+  "author": {
+    "name": "Agent Budget"
+  },
+  "homepage": "https://github.com/psjostrom/agent-budget",
+  "repository": "https://github.com/psjostrom/agent-budget",
+  "license": "MIT",
+  "keywords": ["coding-agent", "mcp", "context", "tokens", "budget"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Agent Budget",
+    "shortDescription": "Reduce coding-agent context waste with dossiers, budgeted reads, and summarized logs.",
+    "longDescription": "Agent Budget gives Codex a local MCP server for repo indexing, task dossiers, budgeted file reads, command summaries, diff summaries, and token-cost reports.",
+    "developerName": "Agent Budget",
+    "category": "Productivity",
+    "capabilities": ["MCP", "Context", "Code"],
+    "websiteURL": "https://github.com/psjostrom/agent-budget",
+    "privacyPolicyURL": "https://github.com/psjostrom/agent-budget",
+    "termsOfServiceURL": "https://github.com/psjostrom/agent-budget",
+    "defaultPrompt": [
+      "Use Agent Budget for this coding task.",
+      "Create a task dossier before reading files.",
+      "Compare the token cost of this change."
+    ],
+    "brandColor": "#2563EB"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "agent_budget": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/bin/agent-budget-mcp",
+      "args": ["--repo", "${CLAUDE_PROJECT_DIR:-.}"],
+      "env": {}
+    }
+  }
+}
