@@ -24,4 +24,17 @@ describe("config", () => {
   it("respects ignore globs in defaults", () => {
     expect(loadConfig(process.cwd()).ignore).toContain("node_modules/**");
   });
+
+  it("provides gate defaults", () => {
+    const gate = loadConfig(process.cwd()).gate;
+    expect(gate).toEqual({ enabled: true, rewriteCommands: true, blockBroadShell: true, blockNoisyReads: true });
+  });
+
+  it("allows disabling the gate via repo config", () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "abg-gate-"));
+    fs.writeFileSync(path.join(dir, "agent-budget.config.json"), JSON.stringify({ gate: { enabled: false } }));
+    const gate = loadConfig(dir).gate;
+    expect(gate.enabled).toBe(false);
+    expect(gate.rewriteCommands).toBe(true);
+  });
 });

@@ -1,16 +1,9 @@
 import { execa } from "execa";
 import { budgetReport } from "../budget/events.js";
+import { fileCategory } from "../utils/category.js";
 import { capText } from "../utils/text.js";
 
-export function fileCategory(file: string): string {
-  if (/lock|pnpm-lock|package-lock|yarn.lock/.test(file)) return "lockfile";
-  if (/(^|\/)(__snapshots__|fixtures?|generated|demo\/fixtures)|\.(snap|golden)\./.test(file)) return "generated";
-  if (/(^|\/)(test|tests|__tests__)\/|(\.|-)(test|spec)\.[^.]+$/.test(file)) return "test";
-  if (/README|docs\/|\.md$/.test(file)) return "docs";
-  if (/config|\.json|\.toml|\.ya?ml|env/.test(file)) return "config";
-  if (/dist|generated|build/.test(file)) return "generated";
-  return "source";
-}
+export { fileCategory };
 
 export async function gitDiffSummary(repoRoot: string, staged = false): Promise<{ summary: string; changedFiles: Array<{ path: string; added: number; removed: number; category: string; risky: boolean }>; riskyChanges: string[]; truncated: boolean }> {
   const args = ["diff", "--numstat", ...(staged ? ["--staged"] : [])];

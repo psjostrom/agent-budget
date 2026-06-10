@@ -28,6 +28,12 @@ export const configSchema = z.object({
     command: z.string().nullable().default(null),
     timeoutMs: z.number().int().positive().default(60000),
     maxOutputChars: z.number().int().positive().default(6000)
+  }),
+  gate: z.object({
+    enabled: z.boolean().default(true),
+    rewriteCommands: z.boolean().default(true),
+    blockBroadShell: z.boolean().default(true),
+    blockNoisyReads: z.boolean().default(true)
   })
 });
 
@@ -40,7 +46,8 @@ export const defaultConfig: AgentBudgetConfig = configSchema.parse({
   budgets: { defaultDossierChars: 12000, defaultReadChars: 4000, maxToolOutputChars: 8000, maxRawLogBytes: 5000000 },
   commands: { allowed: ["pnpm test", "pnpm vitest", "pnpm tsc", "npm test", "yarn test", "npx tsc", "git diff", "git status"], timeoutMs: 120000 },
   security: { redactSecrets: true, blockDangerousShell: true },
-  localScout: { enabled: false, command: null, timeoutMs: 60000, maxOutputChars: 6000 }
+  localScout: { enabled: false, command: null, timeoutMs: 60000, maxOutputChars: 6000 },
+  gate: { enabled: true, rewriteCommands: true, blockBroadShell: true, blockNoisyReads: true }
 });
 
 function mergeConfig(base: AgentBudgetConfig, partial: unknown): AgentBudgetConfig {
@@ -52,7 +59,8 @@ function mergeConfig(base: AgentBudgetConfig, partial: unknown): AgentBudgetConf
     budgets: { ...base.budgets, ...p.budgets },
     commands: { ...base.commands, ...p.commands },
     security: { ...base.security, ...p.security },
-    localScout: { ...base.localScout, ...p.localScout }
+    localScout: { ...base.localScout, ...p.localScout },
+    gate: { ...base.gate, ...p.gate }
   });
 }
 

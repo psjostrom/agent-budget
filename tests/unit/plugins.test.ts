@@ -15,7 +15,7 @@ describe("plugin packages", () => {
   it("validates the Claude plugin package with the TypeScript validator", () => {
     const result = validatePlugin(path.join(pluginRoot, "claude"), "claude");
     expect(result.summary).toContain("passed");
-    expect(result.checked).toHaveLength(4);
+    expect(result.checked).toHaveLength(6);
     expect(result.warnings).toEqual([]);
   });
 

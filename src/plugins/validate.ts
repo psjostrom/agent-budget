@@ -54,6 +54,24 @@ const mcpConfigSchema = z.object({
   mcpServers: z.record(mcpServerSchema)
 });
 
+const hooksConfigSchema = z.object({
+  hooks: z.record(
+    z.array(
+      z.object({
+        matcher: z.string().optional(),
+        hooks: z.array(
+          z.object({
+            type: z.literal("command"),
+            command: z.string().min(1),
+            timeout: z.number().positive().optional(),
+            statusMessage: z.string().optional()
+          }).passthrough()
+        )
+      }).passthrough()
+    )
+  )
+});
+
 export type PluginValidationResult = {
   summary: string;
   root: string;
@@ -92,6 +110,8 @@ export function validatePlugin(root: string, host: "codex" | "claude"): PluginVa
   const manifestFile = path.join(absRoot, host === "codex" ? ".codex-plugin/plugin.json" : ".claude-plugin/plugin.json");
   const mcpFile = path.join(absRoot, ".mcp.json");
   const launcherFile = path.join(absRoot, "bin/agent-budget-mcp");
+  const gateLauncherFile = path.join(absRoot, "bin/agent-budget-gate");
+  const hooksFile = path.join(absRoot, "hooks/hooks.json");
   const skillFile = path.join(absRoot, "skills/agent-budget/SKILL.md");
 
   assertFile(manifestFile, `${host} plugin manifest`, checked);
@@ -110,6 +130,12 @@ export function validatePlugin(root: string, host: "codex" | "claude"): PluginVa
   }
 
   assertExecutable(launcherFile);
+  if (fs.existsSync(hooksFile) || fs.existsSync(gateLauncherFile)) {
+    assertFile(hooksFile, "hooks config", checked);
+    hooksConfigSchema.parse(readJson(hooksFile));
+    assertFile(gateLauncherFile, "gate launcher", checked);
+    assertExecutable(gateLauncherFile);
+  }
   assertSkill(skillFile);
 
   return {
