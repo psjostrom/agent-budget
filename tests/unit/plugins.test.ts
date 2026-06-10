@@ -8,7 +8,7 @@ describe("plugin packages", () => {
   it("validates the Codex plugin package with the TypeScript validator", () => {
     const result = validatePlugin(path.join(pluginRoot, "codex"), "codex");
     expect(result.summary).toContain("passed");
-    expect(result.checked).toHaveLength(4);
+    expect(result.checked).toHaveLength(6);
     expect(result.warnings).toEqual([]);
   });
 

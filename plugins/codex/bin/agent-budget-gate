@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+import { existsSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { spawn } from "node:child_process";
+
+const here = dirname(fileURLToPath(import.meta.url));
+const repoRoot = resolve(here, "../../..");
+const gate = resolve(repoRoot, "dist/hooks/pre-tool-use.js");
+
+if (!existsSync(gate)) {
+  console.error(`Agent Budget gate is not built. Run "pnpm build" in ${repoRoot}.`);
+  process.exit(1);
+}
+
+const child = spawn(process.execPath, [gate], {
+  stdio: "inherit"
+});
+
+child.on("exit", (code, signal) => {
+  if (signal) process.kill(process.pid, signal);
+  process.exit(code ?? 0);
+});
