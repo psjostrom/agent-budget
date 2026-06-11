@@ -1,0 +1,20 @@
+{
+  "name": "agent-budget-local",
+  "interface": {
+    "displayName": "Agent Budget Local"
+  },
+  "plugins": [
+    {
+      "name": "agent-budget",
+      "source": {
+        "source": "local",
+        "path": "./plugins/codex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -8,9 +8,12 @@
     "agent-budget": "dist/src/cli/index.js"
   },
   "files": [
-    "dist",
+    ".agents",
+    "dist/hooks",
+    "dist/src",
     "docs",
     "codex",
+    "plugins",
     "skills",
     "hooks",
     "agent-budget.config.example.json",

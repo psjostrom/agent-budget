@@ -53,7 +53,7 @@ program.command("init").option("--force").action((opts) => {
   print("Agent Budget files initialized.");
 });
 
-program.command("doctor").option("--repo <repo>", ".").action(async (opts) => {
+program.command("doctor").option("--repo <repo>", "repository root", ".").action(async (opts) => {
   const repoRoot = resolveRepo(opts.repo);
   const checks = {
     node: process.versions.node,
@@ -70,7 +70,7 @@ program.command("doctor").option("--repo <repo>", ".").action(async (opts) => {
   print({ summary: "doctor completed", checks });
 });
 
-program.command("index").option("--repo <repo>", ".").action(async (opts) => {
+program.command("index").option("--repo <repo>", "repository root", ".").action(async (opts) => {
   const repoRoot = resolveRepo(opts.repo);
   const result = await measured(
     repoRoot,
@@ -82,42 +82,42 @@ program.command("index").option("--repo <repo>", ".").action(async (opts) => {
   print({ summary: `Indexed ${result.stats.fileCount} files.`, indexPath: path.join(stateDir(repoRoot), "index.json"), stats: result.stats });
 });
 
-program.command("dossier").argument("<task>").option("--repo <repo>", ".").option("--format <format>", "markdown").option("--budget <chars>", "12000").action(async (task, opts) => {
+program.command("dossier").argument("<task>").option("--repo <repo>", "repository root", ".").option("--format <format>", "markdown").option("--budget <chars>", "12000").action(async (task, opts) => {
   const repoRoot = resolveRepo(opts.repo);
   const result = await measured(repoRoot, "dossier", { task, opts }, () => generateDossier(repoRoot, task, Number(opts.budget)));
   print(result.markdown);
 });
 
-program.command("search").argument("<query>").option("--repo <repo>", ".").option("--limit <n>", "10").action(async (query, opts) => {
+program.command("search").argument("<query>").option("--repo <repo>", "repository root", ".").option("--limit <n>", "10").action(async (query, opts) => {
   const repoRoot = resolveRepo(opts.repo);
   print(await measured(repoRoot, "search", { query, opts }, () => searchIndex(repoRoot, query, Number(opts.limit))));
 });
 
-program.command("read").argument("<path>").option("--repo <repo>", ".").option("--budget <chars>", "4000").option("--query <query>").action(async (file, opts) => {
+program.command("read").argument("<path>").option("--repo <repo>", "repository root", ".").option("--budget <chars>", "4000").option("--query <query>").action(async (file, opts) => {
   const repoRoot = resolveRepo(opts.repo);
   print(await measured(repoRoot, "read", { file, opts }, () => readBudgeted(repoRoot, file, Number(opts.budget), opts.query)));
 });
 
-program.command("run").option("--repo <repo>", ".").option("--kind <kind>", "generic").option("--allow-unconfigured").argument("[cmd...]", "command after --").allowUnknownOption(true).allowExcessArguments(true).action(async (cmdParts: string[], opts) => {
+program.command("run").option("--repo <repo>", "repository root", ".").option("--kind <kind>", "generic").option("--allow-unconfigured").argument("[cmd...]", "command after --").allowUnknownOption(true).allowExcessArguments(true).action(async (cmdParts: string[], opts) => {
   const repoRoot = resolveRepo(opts.repo);
   const parts = cmdParts.includes("--") ? cmdParts.slice(cmdParts.indexOf("--") + 1) : cmdParts;
   print(await measured(repoRoot, "run", { opts, parts }, () => runSummary(repoRoot, opts.kind, parts, !!opts.allowUnconfigured)));
 });
 
-program.command("diff").option("--repo <repo>", ".").option("--staged").action(async (opts) => {
+program.command("diff").option("--repo <repo>", "repository root", ".").option("--staged").action(async (opts) => {
   const repoRoot = resolveRepo(opts.repo);
   print(await measured(repoRoot, "diff", opts, () => gitDiffSummary(repoRoot, !!opts.staged)));
 });
 
-program.command("compare-cost").option("--repo <repo>", ".").option("--base <ref>", "HEAD~1").option("--head <ref>", "HEAD").action(async (opts) => {
+program.command("compare-cost").option("--repo <repo>", "repository root", ".").option("--base <ref>", "HEAD~1").option("--head <ref>", "HEAD").action(async (opts) => {
   const repoRoot = resolveRepo(opts.repo);
   print(await measured(repoRoot, "compare-cost", opts, () => compareCost(repoRoot, opts.base, opts.head)));
 });
 
-program.command("budget").option("--repo <repo>", ".").action((opts) => print(budgetReport(resolveRepo(opts.repo))));
-program.command("validate-plugins").option("--repo <repo>", ".").action((opts) => print(validateBundledPlugins(resolveRepo(opts.repo))));
-program.command("mcp").option("--repo <repo>", ".").action((opts) => startMcp(resolveRepo(opts.repo)));
-program.command("proof").option("--repo <repo>", ".").action((opts) => {
+program.command("budget").option("--repo <repo>", "repository root", ".").action((opts) => print(budgetReport(resolveRepo(opts.repo))));
+program.command("validate-plugins").option("--repo <repo>", "repository root", ".").action((opts) => print(validateBundledPlugins(resolveRepo(opts.repo))));
+program.command("mcp").option("--repo <repo>", "repository root", ".").action((opts) => startMcp(resolveRepo(opts.repo)));
+program.command("proof").option("--repo <repo>", "repository root", ".").action((opts) => {
   const repoRoot = resolveRepo(opts.repo);
   const pnpmVersion = (() => {
     try {
