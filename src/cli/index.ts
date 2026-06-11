@@ -40,7 +40,7 @@ function print(data: unknown): void {
 }
 
 const program = new Command();
-program.name("frontload").description("Local-first context and cost gateway for AI coding agents.").version("0.1.0");
+program.name("frontload").description("Local-first context and cost gateway for AI coding agents.").version("0.1.2");
 
 program
   .command("init")
