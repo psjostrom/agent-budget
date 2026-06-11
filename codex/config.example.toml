@@ -2,28 +2,28 @@
 [features]
 hooks = true
 
-[mcp_servers.agent_budget]
+[mcp_servers.frontload]
 command = "pnpm"
-args = ["agent-budget", "mcp", "--repo", "."]
+args = ["frontload", "mcp", "--repo", "."]
 startup_timeout_sec = 20
 tool_timeout_sec = 120
 enabled = true
 required = true
 enabled_tools = [
-  "abg_policy",
-  "abg_repo_index",
-  "abg_repo_dossier",
-  "abg_search",
-  "abg_read_budgeted",
-  "abg_run_summary",
-  "abg_git_diff_summary",
-  "abg_budget_report",
-  "abg_local_scout"
+  "fl_policy",
+  "fl_repo_index",
+  "fl_repo_dossier",
+  "fl_search",
+  "fl_read_budgeted",
+  "fl_run_summary",
+  "fl_git_diff_summary",
+  "fl_budget_report",
+  "fl_local_scout"
 ]
 default_tools_approval_mode = "prompt"
 
-[mcp_servers.agent_budget_global]
-command = "agent-budget"
+[mcp_servers.frontload_global]
+command = "frontload"
 args = ["mcp", "--repo", "."]
 startup_timeout_sec = 20
 tool_timeout_sec = 120

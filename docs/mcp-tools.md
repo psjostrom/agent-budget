@@ -7,14 +7,14 @@ This project uses `@modelcontextprotocol/sdk` with imports from:
 
 Tools:
 
-- `abg_policy`
-- `abg_repo_index`
-- `abg_repo_dossier`
-- `abg_search`
-- `abg_read_budgeted`
-- `abg_run_summary`
-- `abg_git_diff_summary`
-- `abg_budget_report`
-- `abg_local_scout`
+- `fl_policy`
+- `fl_repo_index`
+- `fl_repo_dossier`
+- `fl_search`
+- `fl_read_budgeted`
+- `fl_run_summary`
+- `fl_git_diff_summary`
+- `fl_budget_report`
+- `fl_local_scout`
 
 Each tool returns structured JSON with a human-readable `summary`.

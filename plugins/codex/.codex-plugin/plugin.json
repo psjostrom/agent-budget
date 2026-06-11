@@ -1,28 +1,28 @@
 {
-  "name": "agent-budget",
+  "name": "frontload",
   "version": "0.1.0",
   "description": "Local-first context and cost controls for coding agents.",
   "author": {
-    "name": "Agent Budget"
+    "name": "Frontload"
   },
-  "homepage": "https://github.com/psjostrom/agent-budget",
-  "repository": "https://github.com/psjostrom/agent-budget",
+  "homepage": "https://github.com/psjostrom/frontload",
+  "repository": "https://github.com/psjostrom/frontload",
   "license": "MIT",
   "keywords": ["coding-agent", "mcp", "context", "tokens", "budget"],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
-    "displayName": "Agent Budget",
+    "displayName": "Frontload",
     "shortDescription": "Reduce coding-agent context waste with dossiers, budgeted reads, and summarized logs.",
-    "longDescription": "Agent Budget gives Codex a local MCP server for repo indexing, task dossiers, budgeted file reads, command summaries, diff summaries, and token-cost reports.",
-    "developerName": "Agent Budget",
+    "longDescription": "Frontload gives Codex a local MCP server for repo indexing, task dossiers, budgeted file reads, command summaries, diff summaries, and token-cost reports.",
+    "developerName": "Frontload",
     "category": "Productivity",
     "capabilities": ["MCP", "Context", "Code"],
-    "websiteURL": "https://github.com/psjostrom/agent-budget",
-    "privacyPolicyURL": "https://github.com/psjostrom/agent-budget",
-    "termsOfServiceURL": "https://github.com/psjostrom/agent-budget",
+    "websiteURL": "https://github.com/psjostrom/frontload",
+    "privacyPolicyURL": "https://github.com/psjostrom/frontload",
+    "termsOfServiceURL": "https://github.com/psjostrom/frontload",
     "defaultPrompt": [
-      "Use Agent Budget for this coding task.",
+      "Use Frontload for this coding task.",
       "Create a task dossier before reading files.",
       "Compare the token cost of this change."
     ],

@@ -109,24 +109,24 @@ export function validatePlugin(root: string, host: "codex" | "claude"): PluginVa
   const warnings: string[] = [];
   const manifestFile = path.join(absRoot, host === "codex" ? ".codex-plugin/plugin.json" : ".claude-plugin/plugin.json");
   const mcpFile = path.join(absRoot, ".mcp.json");
-  const launcherFile = path.join(absRoot, "bin/agent-budget-mcp");
-  const gateLauncherFile = path.join(absRoot, "bin/agent-budget-gate");
+  const launcherFile = path.join(absRoot, "bin/frontload-mcp");
+  const gateLauncherFile = path.join(absRoot, "bin/frontload-gate");
   const hooksFile = path.join(absRoot, "hooks/hooks.json");
-  const skillFile = path.join(absRoot, "skills/agent-budget/SKILL.md");
+  const skillFile = path.join(absRoot, "skills/frontload/SKILL.md");
 
   assertFile(manifestFile, `${host} plugin manifest`, checked);
   assertFile(mcpFile, "MCP config", checked);
   assertFile(launcherFile, "MCP launcher", checked);
-  assertFile(skillFile, "Agent Budget skill", checked);
+  assertFile(skillFile, "Frontload skill", checked);
 
   const manifest = readJson(manifestFile);
   if (host === "codex") codexPluginSchema.parse(manifest);
   else claudePluginSchema.parse(manifest);
 
   const mcp = mcpConfigSchema.parse(readJson(mcpFile));
-  if (!mcp.mcpServers.agent_budget) throw new Error(`${mcpFile} must define mcpServers.agent_budget`);
-  if (!mcp.mcpServers.agent_budget.command.includes("agent-budget-mcp")) {
-    warnings.push("agent_budget MCP command does not reference the bundled launcher");
+  if (!mcp.mcpServers.frontload) throw new Error(`${mcpFile} must define mcpServers.frontload`);
+  if (!mcp.mcpServers.frontload.command.includes("frontload-mcp")) {
+    warnings.push("frontload MCP command does not reference the bundled launcher");
   }
 
   assertExecutable(launcherFile);

@@ -41,7 +41,7 @@ export async function runPreToolUseHook(rawInput?: string): Promise<string | nul
     const raw = rawInput ?? (await readStdin());
     const payload = raw.trim() ? (JSON.parse(raw) as Record<string, unknown>) : {};
     const root = repoRoot(payload);
-    if (!fs.existsSync(path.join(root, ".agent-budget"))) return null;
+    if (!fs.existsSync(path.join(root, ".frontload"))) return null;
 
     const config = loadConfig(root);
     if (!config.gate.enabled) return null;

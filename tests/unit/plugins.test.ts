@@ -28,7 +28,7 @@ describe("plugin packages", () => {
   it("publishes the Codex plugin through the repo marketplace", () => {
     const marketplace = JSON.parse(fs.readFileSync(path.resolve(".agents/plugins/marketplace.json"), "utf8"));
     expect(marketplace.plugins).toContainEqual({
-      name: "agent-budget",
+      name: "frontload",
       source: { source: "local", path: "./plugins/codex" },
       policy: { installation: "AVAILABLE", authentication: "ON_INSTALL" },
       category: "Productivity"

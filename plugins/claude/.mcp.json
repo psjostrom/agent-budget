@@ -1,7 +1,7 @@
 {
   "mcpServers": {
-    "agent_budget": {
-      "command": "${CLAUDE_PLUGIN_ROOT}/bin/agent-budget-mcp",
+    "frontload": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/bin/frontload-mcp",
       "args": ["--repo", "${CLAUDE_PROJECT_DIR:-.}"],
       "env": {}
     }

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { execa } from "execa";
-import { AgentBudgetConfig, loadConfig } from "../config/config.js";
+import { FrontloadConfig, loadConfig } from "../config/config.js";
 import { CommandSummary, Finding } from "../types.js";
 import { nowStamp, stateDir } from "../utils/path.js";
 import { capText, redactSecrets } from "../utils/text.js";
@@ -37,7 +37,7 @@ function parseFindings(output: string): Finding[] {
   return findings.slice(0, 30);
 }
 
-function isAllowed(command: string, config: AgentBudgetConfig): boolean {
+function isAllowed(command: string, config: FrontloadConfig): boolean {
   return config.commands.allowed.some((allowed) => command === allowed || command.startsWith(`${allowed} `));
 }
 
@@ -85,7 +85,7 @@ function inferredAllowedCommands(repoRoot: string): string[] {
   return [...commands];
 }
 
-function isAllowedWithDiscovery(repoRoot: string, command: string, config: AgentBudgetConfig): boolean {
+function isAllowedWithDiscovery(repoRoot: string, command: string, config: FrontloadConfig): boolean {
   const discovered = { ...config, commands: { ...config.commands, allowed: [...config.commands.allowed, ...inferredAllowedCommands(repoRoot)] } };
   return isAllowed(command, discovered);
 }
@@ -93,7 +93,7 @@ function isAllowedWithDiscovery(repoRoot: string, command: string, config: Agent
 export async function runSummary(repoRoot: string, kind: CommandSummary["kind"], commandParts: string[], allowUnconfigured = false, config = loadConfig(repoRoot)): Promise<CommandSummary> {
   const command = commandParts.join(" ");
   if (!allowUnconfigured && !isAllowedWithDiscovery(repoRoot, command, config)) {
-    throw new Error(`Command is not allowed by agent-budget.config.json: ${command}`);
+    throw new Error(`Command is not allowed by frontload.config.json: ${command}`);
   }
   const logDir = path.join(stateDir(repoRoot), "logs");
   fs.mkdirSync(logDir, { recursive: true });

@@ -1,11 +1,11 @@
 {
-  "name": "agent-budget",
+  "name": "frontload",
   "version": "0.1.0",
   "description": "Local-first context and cost gateway for AI coding agents.",
   "type": "module",
   "packageManager": "pnpm@10.14.0",
   "bin": {
-    "agent-budget": "dist/src/cli/index.js"
+    "frontload": "dist/src/cli/index.js"
   },
   "files": [
     ".agents",
@@ -16,13 +16,13 @@
     "plugins",
     "skills",
     "hooks",
-    "agent-budget.config.example.json",
+    "frontload.config.example.json",
     "AGENTS.example.md",
     "README.md"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "agent-budget": "node dist/src/cli/index.js",
+    "frontload": "node dist/src/cli/index.js",
     "test": "vitest run tests/unit",
     "test:watch": "vitest",
     "e2e": "vitest run tests/e2e",

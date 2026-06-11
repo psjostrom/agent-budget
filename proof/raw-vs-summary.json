@@ -9,5 +9,5 @@
     "expected '92 mg/dL' to be '93 mg/dL' // Object.is equality"
   ],
   "events": 7,
-  "fullLog": "/Users/psjostrom/code/agent-budget/fixtures/react-ts-app/.agent-budget/logs/2026-06-09T12-33-22-528Z-test.log"
+  "fullLog": "/Users/psjostrom/code/frontload/fixtures/react-ts-app/.frontload/logs/2026-06-09T12-33-22-528Z-test.log"
 }

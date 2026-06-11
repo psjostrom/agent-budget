@@ -1,4 +1,4 @@
-# Agent Budget Dossier
+# Frontload Dossier
 
 ## Task
 
@@ -63,4 +63,4 @@ Fix stale chart tooltip value after sensor reconnect
 
 ## Context limits
 
-This dossier intentionally omits raw file contents. Use `abg_read_budgeted` for targeted reads.
+This dossier intentionally omits raw file contents. Use `fl_read_budgeted` for targeted reads.

@@ -9,7 +9,7 @@ export function rel(repoRoot: string, file: string): string {
 }
 
 export function stateDir(repoRoot: string): string {
-  return path.join(repoRoot, ".agent-budget");
+  return path.join(repoRoot, ".frontload");
 }
 
 export function nowStamp(): string {

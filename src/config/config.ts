@@ -37,11 +37,11 @@ export const configSchema = z.object({
   })
 });
 
-export type AgentBudgetConfig = z.infer<typeof configSchema>;
+export type FrontloadConfig = z.infer<typeof configSchema>;
 
-export const defaultConfig: AgentBudgetConfig = configSchema.parse({
+export const defaultConfig: FrontloadConfig = configSchema.parse({
   repoRoot: ".",
-  ignore: ["node_modules/**", ".git/**", "dist/**", "build/**", "coverage/**", "**/*.lock", ".agent-budget/**"],
+  ignore: ["node_modules/**", ".git/**", "dist/**", "build/**", "coverage/**", "**/*.lock", ".frontload/**"],
   index: { maxFileBytes: 300000, extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".md", ".kt", ".kts"] },
   budgets: { defaultDossierChars: 12000, defaultReadChars: 4000, maxToolOutputChars: 8000, maxRawLogBytes: 5000000 },
   commands: { allowed: ["pnpm test", "pnpm vitest", "pnpm tsc", "npm test", "yarn test", "npx tsc", "git diff", "git status"], timeoutMs: 120000 },
@@ -50,8 +50,8 @@ export const defaultConfig: AgentBudgetConfig = configSchema.parse({
   gate: { enabled: true, rewriteCommands: true, blockBroadShell: true, blockNoisyReads: true }
 });
 
-function mergeConfig(base: AgentBudgetConfig, partial: unknown): AgentBudgetConfig {
-  const p = partial as Partial<AgentBudgetConfig>;
+function mergeConfig(base: FrontloadConfig, partial: unknown): FrontloadConfig {
+  const p = partial as Partial<FrontloadConfig>;
   return configSchema.parse({
     ...base,
     ...p,
@@ -64,8 +64,8 @@ function mergeConfig(base: AgentBudgetConfig, partial: unknown): AgentBudgetConf
   });
 }
 
-export function loadConfig(repoRoot: string): AgentBudgetConfig {
-  const file = path.join(repoRoot, "agent-budget.config.json");
+export function loadConfig(repoRoot: string): FrontloadConfig {
+  const file = path.join(repoRoot, "frontload.config.json");
   if (!fs.existsSync(file)) return defaultConfig;
   const raw = JSON.parse(fs.readFileSync(file, "utf8"));
   return mergeConfig(defaultConfig, raw);

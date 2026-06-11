@@ -11,13 +11,13 @@ describe("config", () => {
 
   it("loads repo config", () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "abg-config-"));
-    fs.writeFileSync(path.join(dir, "agent-budget.config.json"), JSON.stringify({ budgets: { defaultReadChars: 1234 } }));
+    fs.writeFileSync(path.join(dir, "frontload.config.json"), JSON.stringify({ budgets: { defaultReadChars: 1234 } }));
     expect(loadConfig(dir).budgets.defaultReadChars).toBe(1234);
   });
 
   it("validates invalid config with helpful errors", () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "abg-config-bad-"));
-    fs.writeFileSync(path.join(dir, "agent-budget.config.json"), JSON.stringify({ budgets: { defaultReadChars: -1 } }));
+    fs.writeFileSync(path.join(dir, "frontload.config.json"), JSON.stringify({ budgets: { defaultReadChars: -1 } }));
     expect(() => loadConfig(dir)).toThrow();
   });
 
@@ -32,7 +32,7 @@ describe("config", () => {
 
   it("allows disabling the gate via repo config", () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "abg-gate-"));
-    fs.writeFileSync(path.join(dir, "agent-budget.config.json"), JSON.stringify({ gate: { enabled: false } }));
+    fs.writeFileSync(path.join(dir, "frontload.config.json"), JSON.stringify({ gate: { enabled: false } }));
     const gate = loadConfig(dir).gate;
     expect(gate.enabled).toBe(false);
     expect(gate.rewriteCommands).toBe(true);

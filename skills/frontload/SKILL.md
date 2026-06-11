@@ -1,0 +1,12 @@
+---
+name: frontload
+description: Use this when working in a code repository with the Frontload MCP server to reduce context, summarize tests, produce task dossiers, and avoid expensive broad exploration.
+---
+
+# Frontload
+
+Start with `fl_repo_dossier` for the current task. Use `fl_search` for indexed search and `fl_read_budgeted` for bounded file excerpts.
+
+Run tests, typechecks, and lint through `fl_run_summary` so raw logs stay local while failures are summarized. Use `fl_git_diff_summary` before reviewing changes and `fl_budget_report` before repeating repair loops.
+
+Avoid raw `find .`, `ls -R`, broad `grep -R`, full lockfile dumps, and unwrapped test commands.

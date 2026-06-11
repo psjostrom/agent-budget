@@ -1,24 +1,24 @@
-# Agent Budget Token Cost Trial: Strimma and Springa
+# Frontload Token Cost Trial: Strimma and Springa
 
 Date: 2026-06-09
 
-This report records a local trial of `agent-budget` against two sibling repos:
+This report records a local trial of `frontload` against two sibling repos:
 
 - `/Users/psjostrom/code/strimma`
 - `/Users/psjostrom/code/springa`
 
-The comparison uses recent feature/fix commits as feature-sized work units. Token counts use the same estimate as `agent-budget`: `chars / 4`.
+The comparison uses recent feature/fix commits as feature-sized work units. Token counts use the same estimate as `frontload`: `chars / 4`.
 
 ## Method
 
-For each feature, the `agent-budget` path was modeled as:
+For each feature, the `frontload` path was modeled as:
 
 1. Generate a task dossier.
 2. Run indexed search when the dossier was too broad.
 3. Read a small set of budgeted file excerpts.
 4. Run a summarized verification command where applicable.
 
-The "without agent-budget" baseline is the cost of loading all files changed by the feature commit into agent context. A patch-only baseline is also included because some agents inspect patches instead of full files.
+The "without frontload" baseline is the cost of loading all files changed by the feature commit into agent context. A patch-only baseline is also included because some agents inspect patches instead of full files.
 
 The one-time `index` operation is reported separately. The current CLI event logger records the full internal index result as output, so the budget report overstates visible index context. Treat index as setup/amortized cost, not per-feature context.
 
@@ -40,7 +40,7 @@ Those failed command summaries were still useful for measuring command-summary o
 
 ## Per-Feature Cost
 
-| Repo | Feature | Commit | With agent-budget | Without, full changed files | Savings | Patch-only baseline |
+| Repo | Feature | Commit | With frontload | Without, full changed files | Savings | Patch-only baseline |
 |---|---|---:|---:|---:|---:|---:|
 | strimma | Data retention + Story month navigation | `fab2660` | ~7,114 | ~123,987 | ~94.3% | ~23,193 |
 | strimma | CamAPS pump-only Attempting freshness fix | `577e9bf` | ~6,678 | ~7,898 | ~15.4% | ~7,226 |
@@ -53,24 +53,24 @@ Those failed command summaries were still useful for measuring command-summary o
 
 Excluding one-time index setup:
 
-| Repo | With agent-budget | Without, full changed files | Savings |
+| Repo | With frontload | Without, full changed files | Savings |
 |---|---:|---:|---:|
 | strimma | ~13,792 | ~131,885 | ~89.5% |
 | springa | ~27,261 | ~750,205 | ~96.4% |
 
 Including the currently logged index cost:
 
-| Repo | With agent-budget + logged index | Without, full changed files | Savings |
+| Repo | With frontload + logged index | Without, full changed files | Savings |
 |---|---:|---:|---:|
 | strimma | ~55,044 | ~131,885 | ~58.3% |
 | springa | ~94,599 | ~750,205 | ~87.4% |
 
 ## Observations
 
-`agent-budget` works best on broad changes with many touched files or noisy generated/demo data. The clearest win was springa's optional-run removal because `lib/demo/fixtures.ts` dominated raw context.
+`frontload` works best on broad changes with many touched files or noisy generated/demo data. The clearest win was springa's optional-run removal because `lib/demo/fixtures.ts` dominated raw context.
 
 It is less impressive on narrow fixes. The strimma CamAPS fix touched only five files, and the dossier/search ranking was noisy, so the measured savings were modest.
 
 The current ranking has quality issues. Generic terms such as `run`, `story`, `settings`, and `constants` pulled in noisy docs and tests. The budgeted reads still constrained context, but relevance would improve with better term weighting, file-type weighting, and deprioritizing long docs unless the prompt explicitly asks for documentation.
 
-The index logging should be adjusted. The visible CLI output is a compact summary, but the event log records the full index object, inflating setup cost in `agent-budget budget`.
+The index logging should be adjusted. The visible CLI output is a compact summary, but the event log records the full index object, inflating setup cost in `frontload budget`.

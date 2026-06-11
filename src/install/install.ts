@@ -40,7 +40,7 @@ export function packageRoot(): string {
     if (fs.existsSync(pkg)) {
       try {
         const parsed = JSON.parse(fs.readFileSync(pkg, "utf8")) as { name?: string };
-        if (parsed.name === "agent-budget") return dir;
+        if (parsed.name === "frontload") return dir;
       } catch {
         // Keep walking upward.
       }
@@ -97,8 +97,8 @@ function upsertCodexMarketplace(homeDir: string, force: boolean): WriteResult {
     plugins: []
   });
   const entry = {
-    name: "agent-budget",
-    source: { source: "local" as const, path: "./plugins/agent-budget" },
+    name: "frontload",
+    source: { source: "local" as const, path: "./plugins/frontload" },
     policy: { installation: "AVAILABLE" as const, authentication: "ON_INSTALL" as const },
     category: "Productivity"
   };
@@ -118,10 +118,10 @@ export function initProject(repoRoot: string, force = false): WriteResult[] {
   const root = packageRoot();
   const absRepo = path.resolve(repoRoot);
   const writes: WriteResult[] = [
-    copyFile(path.join(root, "agent-budget.config.example.json"), path.join(absRepo, "agent-budget.config.json"), force),
+    copyFile(path.join(root, "frontload.config.example.json"), path.join(absRepo, "frontload.config.json"), force),
     copyFile(path.join(root, "AGENTS.example.md"), path.join(absRepo, "AGENTS.md"), force),
     copyFile(path.join(root, "codex/config.example.toml"), path.join(absRepo, "codex/config.toml"), force),
-    ensureDir(path.join(absRepo, ".agent-budget"))
+    ensureDir(path.join(absRepo, ".frontload"))
   ];
   return writes;
 }
@@ -129,23 +129,23 @@ export function initProject(repoRoot: string, force = false): WriteResult[] {
 export function installCodex(homeDir = os.homedir(), force = false): InstallResult {
   const writes: WriteResult[] = [];
   const root = packageRoot();
-  copyDir(path.join(root, "plugins/codex"), path.join(homeDir, "plugins/agent-budget"), force, writes);
+  copyDir(path.join(root, "plugins/codex"), path.join(homeDir, "plugins/frontload"), force, writes);
   writes.push(upsertCodexMarketplace(homeDir, force));
   return {
     agent: "codex",
     writes,
-    notes: ["Restart Codex, open /plugins, choose the Personal marketplace, and install or enable Agent Budget."]
+    notes: ["Restart Codex, open /plugins, choose the Personal marketplace, and install or enable Frontload."]
   };
 }
 
 export function installClaude(homeDir = os.homedir(), force = false): InstallResult {
   const writes: WriteResult[] = [];
   const root = packageRoot();
-  copyDir(path.join(root, "plugins/claude"), path.join(homeDir, ".claude/plugins/agent-budget"), force, writes);
+  copyDir(path.join(root, "plugins/claude"), path.join(homeDir, ".claude/plugins/frontload"), force, writes);
   return {
     agent: "claude",
     writes,
-    notes: ["Start Claude Code with --plugin-dir ~/.claude/plugins/agent-budget, or add that plugin directory through your Claude Code plugin workflow."]
+    notes: ["Start Claude Code with --plugin-dir ~/.claude/plugins/frontload, or add that plugin directory through your Claude Code plugin workflow."]
   };
 }
 

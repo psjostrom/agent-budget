@@ -7,9 +7,9 @@ import { spawn } from "node:child_process";
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, "../../..");
 const cli = resolve(repoRoot, "dist/src/cli/index.js");
-const configuredCli = process.env.AGENT_BUDGET_CLI;
+const configuredCli = process.env.FRONTLOAD_CLI;
 
-const command = configuredCli?.endsWith(".js") ? process.execPath : configuredCli ?? (existsSync(cli) ? process.execPath : "agent-budget");
+const command = configuredCli?.endsWith(".js") ? process.execPath : configuredCli ?? (existsSync(cli) ? process.execPath : "frontload");
 const args = configuredCli
   ? [...(configuredCli.endsWith(".js") ? [configuredCli] : []), "mcp", ...process.argv.slice(2)]
   : existsSync(cli)
@@ -26,6 +26,6 @@ child.on("exit", (code, signal) => {
   process.exit(code ?? 1);
 });
 child.on("error", (error) => {
-  console.error(`Failed to start Agent Budget CLI. Install it with "npm install -g agent-budget" or set AGENT_BUDGET_CLI. ${error.message}`);
+  console.error(`Failed to start Frontload CLI. Install it with "npm install -g frontload" or set FRONTLOAD_CLI. ${error.message}`);
   process.exit(1);
 });

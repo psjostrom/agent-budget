@@ -1,11 +1,11 @@
 {
-  "name": "agent-budget-local",
+  "name": "frontload-local",
   "interface": {
-    "displayName": "Agent Budget Local"
+    "displayName": "Frontload Local"
   },
   "plugins": [
     {
-      "name": "agent-budget",
+      "name": "frontload",
       "source": {
         "source": "local",
         "path": "./plugins/codex"

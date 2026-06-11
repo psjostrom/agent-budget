@@ -100,7 +100,7 @@ export async function compareCost(repoRoot: string, base = "HEAD~1", head = "HEA
     `Changed files: ${changedFiles.length}`,
     `Full changed-file baseline: ${changedFileTokens} tokens`,
     `Patch baseline: ${patchTokens} tokens`,
-    `Agent Budget logged output: ${outputTokensExcludingIndex} tokens excluding index, ${outputTokensIncludingIndex} including index`
+    `Frontload logged output: ${outputTokensExcludingIndex} tokens excluding index, ${outputTokensIncludingIndex} including index`
   ].join("\n");
 
   return {

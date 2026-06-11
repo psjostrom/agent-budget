@@ -1,8 +1,8 @@
 node_modules/
 .pnpm-store/
 dist/
-.agent-budget/
-fixtures/**/.agent-budget/
+.frontload/
+fixtures/**/.frontload/
 fixtures/**/node_modules/
 coverage/
 .DS_Store

@@ -1,4 +1,4 @@
-import { AgentBudgetConfig } from "../config/config.js";
+import { FrontloadConfig } from "../config/config.js";
 import { fileCategory } from "../utils/category.js";
 
 export type HookPermissionDecision = "allow" | "deny" | "ask";
@@ -14,7 +14,7 @@ export type PreToolUseHookOutput = {
 };
 
 export type GateOptions = {
-  /** Full command prefix for Agent Budget's run subcommand, without --kind. */
+  /** Full command prefix for Frontload's run subcommand, without --kind. */
   runnerCommand?: string;
 };
 
@@ -53,7 +53,7 @@ function hasShellControl(command: string): boolean {
 }
 
 function alreadyBudgeted(command: string): boolean {
-  return /\bagent-budget\s+run\b/.test(command) || /dist\/src\/cli\/index\.js["']?\s+run\b/.test(command);
+  return /\bfrontload\s+run\b/.test(command) || /dist\/src\/cli\/index\.js["']?\s+run\b/.test(command);
 }
 
 function commandKind(command: string): "test" | "typecheck" | "lint" | null {
@@ -66,21 +66,21 @@ function commandKind(command: string): "test" | "typecheck" | "lint" | null {
 
 function broadShellReason(command: string): string | null {
   if (/\bgrep\s+-(?:[A-Za-z]*R[A-Za-z]*|[A-Za-z]*r[A-Za-z]*)\b/.test(command)) {
-    return "Broad recursive grep can dump raw context. Use mcp__agent_budget__abg_search with a focused query instead.";
+    return "Broad recursive grep can dump raw context. Use mcp__frontload__fl_search with a focused query instead.";
   }
   if (/^find\s+\.(?:\s|$)/.test(command)) {
-    return "Broad find output can dump raw context. Use mcp__agent_budget__abg_search for indexed discovery instead.";
+    return "Broad find output can dump raw context. Use mcp__frontload__fl_search for indexed discovery instead.";
   }
   if (/^ls\s+-(?:[A-Za-z]*R[A-Za-z]*)(?:\s|$)/.test(command)) {
-    return "Recursive ls can dump raw context. Use mcp__agent_budget__abg_search or mcp__agent_budget__abg_git_diff_summary instead.";
+    return "Recursive ls can dump raw context. Use mcp__frontload__fl_search or mcp__frontload__fl_git_diff_summary instead.";
   }
   if (/^cat\s+(?:\.\/)?(?:pnpm-lock\.yaml|package-lock\.json|yarn\.lock)(?:\s|$)/.test(command)) {
-    return "Lockfiles are noisy. Use mcp__agent_budget__abg_read_budgeted with a focused query, or mcp__agent_budget__abg_search.";
+    return "Lockfiles are noisy. Use mcp__frontload__fl_read_budgeted with a focused query, or mcp__frontload__fl_search.";
   }
   return null;
 }
 
-export function evaluate(payload: GatePayload, config: Pick<AgentBudgetConfig, "gate">, options: GateOptions = {}): PreToolUseHookOutput | null {
+export function evaluate(payload: GatePayload, config: Pick<FrontloadConfig, "gate">, options: GateOptions = {}): PreToolUseHookOutput | null {
   if (!config.gate.enabled) return null;
 
   const name = textField(payload.tool_name);
@@ -93,8 +93,8 @@ export function evaluate(payload: GatePayload, config: Pick<AgentBudgetConfig, "
     if (config.gate.rewriteCommands) {
       const kind = commandKind(command);
       if (kind) {
-        const runner = options.runnerCommand ?? "agent-budget run";
-        return output("allow", `Run ${kind} through Agent Budget so Claude receives a compact summary.`, {
+        const runner = options.runnerCommand ?? "frontload run";
+        return output("allow", `Run ${kind} through Frontload so Claude receives a compact summary.`, {
           ...input,
           command: `${runner} --kind ${kind} -- ${command}`
         });
@@ -115,7 +115,7 @@ export function evaluate(payload: GatePayload, config: Pick<AgentBudgetConfig, "
     if (config.gate.blockNoisyReads && (category === "generated" || category === "lockfile")) {
       return output(
         "deny",
-        `This ${category} file is noisy. Use mcp__agent_budget__abg_read_budgeted with a focused query, or mcp__agent_budget__abg_search before reading it.`
+        `This ${category} file is noisy. Use mcp__frontload__fl_read_budgeted with a focused query, or mcp__frontload__fl_search before reading it.`
       );
     }
   }

@@ -1,4 +1,4 @@
-# Agent Budget Gateway v0.1 — Codex Agent Handoff
+# Frontload Gateway v0.1 — Codex Agent Handoff
 
 ## How to use this handoff
 
@@ -7,8 +7,8 @@ Give this entire file to a Codex CLI agent in a fresh local repository.
 Recommended setup:
 
 ```bash
-git init agent-budget
-cd agent-budget
+git init frontload
+cd frontload
 codex
 ```
 
@@ -22,7 +22,7 @@ Codex CLI is preferred over app-only/IDE workflows for this task because the age
 
 ---
 
-# Build Spec: Agent Budget Gateway v0.1
+# Build Spec: Frontload Gateway v0.1
 
 ## Role
 
@@ -34,7 +34,7 @@ When implementation details are underspecified, make practical engineering decis
 
 ## Product name
 
-`agent-budget`
+`frontload`
 
 ## One-sentence goal
 
@@ -82,14 +82,14 @@ Codex greps everything
 The final repository must include:
 
 ```text
-agent-budget/
+frontload/
   package.json
   pnpm-lock.yaml
   tsconfig.json
   vitest.config.ts
   README.md
   AGENTS.example.md
-  agent-budget.config.example.json
+  frontload.config.example.json
 
   src/
     cli/
@@ -119,7 +119,7 @@ agent-budget/
     AGENTS.md
 
   skills/
-    agent-budget/
+    frontload/
       SKILL.md
 
   hooks/
@@ -162,7 +162,7 @@ Avoid native dependencies unless clearly justified.
 Store local state under:
 
 ```text
-.agent-budget/
+.frontload/
   index.json
   events.jsonl
   logs/
@@ -181,7 +181,7 @@ In `codex/config.example.toml`, include:
 
 - `features.hooks = true`, if supported by the current Codex version
 - an MCP server config with `required = true`, if supported by the current Codex version
-- `enabled_tools` listing only the Agent Budget tools, if supported by the current Codex version
+- `enabled_tools` listing only the Frontload tools, if supported by the current Codex version
 - `default_tools_approval_mode = "auto"` or `"prompt"`, with a documented recommendation
 
 If any of these Codex config keys are unsupported in the installed/current Codex version, document the mismatch and provide the closest working config.
@@ -193,59 +193,59 @@ The project must still work if hooks are unavailable or disabled. Hooks are enfo
 Implement a binary called:
 
 ```bash
-agent-budget
+frontload
 ```
 
 Required commands:
 
 ```bash
-agent-budget init
-agent-budget doctor
-agent-budget index --repo .
-agent-budget dossier "task description" --repo . --format markdown --budget 12000
-agent-budget search "query" --repo . --limit 10
-agent-budget read path/to/file.ts --repo . --budget 4000
-agent-budget run --repo . --kind test -- pnpm test
-agent-budget run --repo . --kind typecheck -- pnpm tsc --noEmit
-agent-budget diff --repo .
-agent-budget budget --repo .
-agent-budget mcp --repo .
+frontload init
+frontload doctor
+frontload index --repo .
+frontload dossier "task description" --repo . --format markdown --budget 12000
+frontload search "query" --repo . --limit 10
+frontload read path/to/file.ts --repo . --budget 4000
+frontload run --repo . --kind test -- pnpm test
+frontload run --repo . --kind typecheck -- pnpm tsc --noEmit
+frontload diff --repo .
+frontload budget --repo .
+frontload mcp --repo .
 ```
 
 ### CLI behavior
 
-`agent-budget init` must create:
+`frontload init` must create:
 
 ```text
-agent-budget.config.json
+frontload.config.json
 codex/config.example.toml
 AGENTS.example.md
 ```
 
 It must not overwrite existing files unless `--force` is passed.
 
-`agent-budget doctor` must verify:
+`frontload doctor` must verify:
 
 - Node version
 - package manager availability
 - repository root detection
 - config validity
-- writable `.agent-budget/`
+- writable `.frontload/`
 - git availability when needed
 - MCP server can start
 - fixture tests are runnable
 
-`agent-budget index` must scan the repo and write `.agent-budget/index.json`.
+`frontload index` must scan the repo and write `.frontload/index.json`.
 
-`agent-budget dossier` must generate a compact task dossier.
+`frontload dossier` must generate a compact task dossier.
 
-`agent-budget run` must run an allowed command and return a summary, not raw unbounded output.
+`frontload run` must run an allowed command and return a summary, not raw unbounded output.
 
-`agent-budget mcp` must start the MCP stdio server.
+`frontload mcp` must start the MCP stdio server.
 
 ## Configuration
 
-Implement `agent-budget.config.json`.
+Implement `frontload.config.json`.
 
 Example:
 
@@ -335,7 +335,7 @@ For unsupported languages like Kotlin in v0.1:
 
 ### Required output
 
-`.agent-budget/index.json` should contain:
+`.frontload/index.json` should contain:
 
 ```ts
 type RepoIndex = {
@@ -357,13 +357,13 @@ type RepoIndex = {
 Implement:
 
 ```bash
-agent-budget dossier "task description"
+frontload dossier "task description"
 ```
 
 And MCP tool:
 
 ```text
-abg_repo_dossier
+fl_repo_dossier
 ```
 
 ### Required behavior
@@ -384,7 +384,7 @@ No LLM is required.
 Markdown output:
 
 ```md
-# Agent Budget Dossier
+# Frontload Dossier
 
 ## Task
 
@@ -421,7 +421,7 @@ Markdown output:
 
 ## Context limits
 
-This dossier intentionally omits raw file contents. Use `abg_read_budgeted` for targeted reads.
+This dossier intentionally omits raw file contents. Use `fl_read_budgeted` for targeted reads.
 ```
 
 The dossier must never exceed the requested budget by more than 10%, unless an explicit error is returned.
@@ -431,13 +431,13 @@ The dossier must never exceed the requested budget by more than 10%, unless an e
 Implement:
 
 ```bash
-agent-budget read src/foo/Foo.tsx --budget 4000
+frontload read src/foo/Foo.tsx --budget 4000
 ```
 
 And MCP tool:
 
 ```text
-abg_read_budgeted
+fl_read_budgeted
 ```
 
 ### Required behavior
@@ -468,15 +468,15 @@ Budgeting strategy:
 Implement:
 
 ```bash
-agent-budget run --kind test -- pnpm test
-agent-budget run --kind typecheck -- pnpm tsc --noEmit
-agent-budget run --kind lint -- pnpm lint
+frontload run --kind test -- pnpm test
+frontload run --kind typecheck -- pnpm tsc --noEmit
+frontload run --kind lint -- pnpm lint
 ```
 
 And MCP tool:
 
 ```text
-abg_run_summary
+fl_run_summary
 ```
 
 ### Required behavior
@@ -486,7 +486,7 @@ Run only allowed commands unless `--allow-unconfigured` is explicitly passed.
 Capture stdout/stderr to a full local log file:
 
 ```text
-.agent-budget/logs/<timestamp>-<kind>.log
+.frontload/logs/<timestamp>-<kind>.log
 ```
 
 Return compact JSON and readable text summary:
@@ -559,13 +559,13 @@ For fixture test logs:
 Implement:
 
 ```bash
-agent-budget diff --repo .
+frontload diff --repo .
 ```
 
 And MCP tool:
 
 ```text
-abg_git_diff_summary
+fl_git_diff_summary
 ```
 
 Required output:
@@ -588,7 +588,7 @@ Do not paste entire diff by default.
 Every CLI and MCP operation must append to:
 
 ```text
-.agent-budget/events.jsonl
+.frontload/events.jsonl
 ```
 
 Event fields:
@@ -610,7 +610,7 @@ type BudgetEvent = {
 Implement:
 
 ```bash
-agent-budget budget --repo .
+frontload budget --repo .
 ```
 
 It should report:
@@ -628,21 +628,21 @@ Use `chars / 4` as the approximate token estimate. Document that it is only an e
 Implement an MCP stdio server started by:
 
 ```bash
-agent-budget mcp --repo .
+frontload mcp --repo .
 ```
 
 Required tools:
 
 ```text
-abg_policy
-abg_repo_index
-abg_repo_dossier
-abg_search
-abg_read_budgeted
-abg_run_summary
-abg_git_diff_summary
-abg_budget_report
-abg_local_scout
+fl_policy
+fl_repo_index
+fl_repo_dossier
+fl_search
+fl_read_budgeted
+fl_run_summary
+fl_git_diff_summary
+fl_budget_report
+fl_local_scout
 ```
 
 ### Tool design requirements
@@ -661,15 +661,15 @@ Do not create many tiny overlapping tools. Tool overload is part of the problem.
 
 ### MCP tool behavior
 
-`abg_policy`
+`fl_policy`
 
 Returns the current budget and command policy.
 
-`abg_repo_index`
+`fl_repo_index`
 
 Runs or refreshes the repo index. Accepts `force?: boolean`.
 
-`abg_repo_dossier`
+`fl_repo_dossier`
 
 Input:
 
@@ -681,7 +681,7 @@ Input:
 }
 ```
 
-`abg_search`
+`fl_search`
 
 Input:
 
@@ -692,7 +692,7 @@ Input:
 }
 ```
 
-`abg_read_budgeted`
+`fl_read_budgeted`
 
 Input:
 
@@ -704,7 +704,7 @@ Input:
 }
 ```
 
-`abg_run_summary`
+`fl_run_summary`
 
 Input:
 
@@ -715,7 +715,7 @@ Input:
 }
 ```
 
-`abg_git_diff_summary`
+`fl_git_diff_summary`
 
 Input:
 
@@ -725,11 +725,11 @@ Input:
 }
 ```
 
-`abg_budget_report`
+`fl_budget_report`
 
 Returns budget events summary.
 
-`abg_local_scout`
+`fl_local_scout`
 
 For v0.1 this must be implemented as an optional extension point.
 
@@ -761,24 +761,24 @@ Preferred shape:
 [features]
 hooks = true
 
-[mcp_servers.agent_budget]
+[mcp_servers.frontload]
 command = "pnpm"
-args = ["agent-budget", "mcp", "--repo", "."]
+args = ["frontload", "mcp", "--repo", "."]
 startup_timeout_sec = 20
 tool_timeout_sec = 120
 enabled = true
 # If supported by current Codex version:
 required = true
 enabled_tools = [
-  "abg_policy",
-  "abg_repo_index",
-  "abg_repo_dossier",
-  "abg_search",
-  "abg_read_budgeted",
-  "abg_run_summary",
-  "abg_git_diff_summary",
-  "abg_budget_report",
-  "abg_local_scout"
+  "fl_policy",
+  "fl_repo_index",
+  "fl_repo_dossier",
+  "fl_search",
+  "fl_read_budgeted",
+  "fl_run_summary",
+  "fl_git_diff_summary",
+  "fl_budget_report",
+  "fl_local_scout"
 ]
 default_tools_approval_mode = "prompt"
 ```
@@ -786,8 +786,8 @@ default_tools_approval_mode = "prompt"
 Also include a safer alternative for globally installed binary:
 
 ```toml
-[mcp_servers.agent_budget_global]
-command = "agent-budget"
+[mcp_servers.frontload_global]
+command = "frontload"
 args = ["mcp", "--repo", "."]
 startup_timeout_sec = 20
 tool_timeout_sec = 120
@@ -801,20 +801,20 @@ If any keys are unsupported by the current Codex version, document that clearly 
 Must instruct Codex:
 
 ```md
-# Agent Budget workflow
+# Frontload workflow
 
-Before broad exploration, call `abg_repo_dossier`.
+Before broad exploration, call `fl_repo_dossier`.
 
 Prefer:
-- `abg_search` over broad grep
-- `abg_read_budgeted` over raw full-file reads
-- `abg_run_summary` over raw test/typecheck commands
-- `abg_git_diff_summary` over raw full diff dumps
-- `abg_budget_report` before and after large tasks
+- `fl_search` over broad grep
+- `fl_read_budgeted` over raw full-file reads
+- `fl_run_summary` over raw test/typecheck commands
+- `fl_git_diff_summary` over raw full diff dumps
+- `fl_budget_report` before and after large tasks
 
 Do not read unrelated files unless the dossier suggests them or you explain why.
 
-Do not run more than two repair loops on the same failure without checking `abg_budget_report` and creating a new focused dossier.
+Do not run more than two repair loops on the same failure without checking `fl_budget_report` and creating a new focused dossier.
 
 When tests fail, pass only the summarized failure back into reasoning unless the full log is truly needed.
 ```
@@ -824,7 +824,7 @@ When tests fail, pass only the summarized failure back into reasoning unless the
 Create:
 
 ```text
-skills/agent-budget/SKILL.md
+skills/frontload/SKILL.md
 ```
 
 It should be short and practical. It should teach Codex when to use the MCP tools and how to avoid raw context pollution.
@@ -833,8 +833,8 @@ Required metadata:
 
 ```md
 ---
-name: agent-budget
-description: Use this when working in a code repository with the Agent Budget MCP server to reduce context, summarize tests, produce task dossiers, and avoid expensive broad exploration.
+name: frontload
+description: Use this when working in a code repository with the Frontload MCP server to reduce context, summarize tests, produce task dossiers, and avoid expensive broad exploration.
 ---
 ```
 
@@ -859,15 +859,15 @@ hooks/post-tool-use-policy.ts
    - `ls -R`
    - `grep -R`
    - obviously huge `rg` commands without file/path limits
-   - raw `npm test`, `pnpm test`, `yarn test`, `tsc`, or `eslint` commands that are not already wrapped by `agent-budget run`
+   - raw `npm test`, `pnpm test`, `yarn test`, `tsc`, or `eslint` commands that are not already wrapped by `frontload run`
 
-2. For raw test/typecheck/lint commands, return an allowed `updatedInput.command` that rewrites to `agent-budget run --kind <kind> -- <original command>` when safe.
+2. For raw test/typecheck/lint commands, return an allowed `updatedInput.command` that rewrites to `frontload run --kind <kind> -- <original command>` when safe.
 
 3. For dangerous broad dump commands, deny with a clear reason telling Codex which MCP tool to use instead.
 
 4. For borderline commands, allow but add additional context suggesting the budgeted tool.
 
-`post-tool-use-policy.ts` should be best-effort. It should detect very large Bash output if present in the hook payload and return feedback telling Codex to use `agent-budget run` next time. Do not rely on unstable transcript parsing.
+`post-tool-use-policy.ts` should be best-effort. It should detect very large Bash output if present in the hook payload and return feedback telling Codex to use `frontload run` next time. Do not rely on unstable transcript parsing.
 
 Hook tests must feed sample hook JSON into the scripts and assert:
 
@@ -987,12 +987,12 @@ Required test categories:
 
 Create a small MCP client test that starts the MCP server and calls:
 
-- `abg_policy`
-- `abg_repo_index`
-- `abg_repo_dossier`
-- `abg_read_budgeted`
-- `abg_run_summary`
-- `abg_budget_report`
+- `fl_policy`
+- `fl_repo_index`
+- `fl_repo_dossier`
+- `fl_read_budgeted`
+- `fl_run_summary`
+- `fl_budget_report`
 
 Store one successful transcript at:
 
@@ -1047,7 +1047,7 @@ Must include:
 Must be generated from:
 
 ```bash
-agent-budget dossier "Fix stale chart tooltip value after sensor reconnect" --repo fixtures/react-ts-app --format markdown --budget 12000
+frontload dossier "Fix stale chart tooltip value after sensor reconnect" --repo fixtures/react-ts-app --format markdown --budget 12000
 ```
 
 ### `proof/raw-vs-summary.json`
@@ -1081,11 +1081,11 @@ The project is done only when all of these are true:
 3. `pnpm test` succeeds.
 4. `pnpm e2e` succeeds.
 5. `pnpm proof` succeeds.
-6. `agent-budget doctor` succeeds on the fixture repo.
-7. `agent-budget index --repo fixtures/react-ts-app` creates `.agent-budget/index.json`.
-8. `agent-budget dossier "Fix stale chart tooltip value after sensor reconnect" --repo fixtures/react-ts-app` creates a useful bounded dossier.
+6. `frontload doctor` succeeds on the fixture repo.
+7. `frontload index --repo fixtures/react-ts-app` creates `.frontload/index.json`.
+8. `frontload dossier "Fix stale chart tooltip value after sensor reconnect" --repo fixtures/react-ts-app` creates a useful bounded dossier.
 9. The dossier ranks relevant tooltip/chart/sensor files above unrelated files.
-10. `agent-budget run --repo fixtures/react-ts-app --kind test -- pnpm test` preserves the failing test information while compressing output.
+10. `frontload run --repo fixtures/react-ts-app --kind test -- pnpm test` preserves the failing test information while compressing output.
 11. The command summary writes the full raw log locally.
 12. MCP server starts over stdio.
 13. MCP client integration test successfully calls required tools.
@@ -1101,7 +1101,7 @@ The project is done only when all of these are true:
 When finished, respond with:
 
 ```md
-# Agent Budget build complete
+# Frontload build complete
 
 ## What was built
 

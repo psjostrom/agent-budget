@@ -8,11 +8,11 @@ describe("hook policy", () => {
   });
 
   it("rewrites test commands", () => {
-    expect(evaluate({ tool_name: "Bash", tool_input: { command: "pnpm test" } }, defaultConfig)?.hookSpecificOutput.updatedInput?.command).toBe("agent-budget run --kind test -- pnpm test");
+    expect(evaluate({ tool_name: "Bash", tool_input: { command: "pnpm test" } }, defaultConfig)?.hookSpecificOutput.updatedInput?.command).toBe("frontload run --kind test -- pnpm test");
   });
 
   it("allows already wrapped commands", () => {
-    expect(evaluate({ tool_name: "Bash", tool_input: { command: "agent-budget run --kind test -- pnpm test" } }, defaultConfig)).toBeNull();
+    expect(evaluate({ tool_name: "Bash", tool_input: { command: "frontload run --kind test -- pnpm test" } }, defaultConfig)).toBeNull();
   });
 
   it("allows unknown safe commands", () => {

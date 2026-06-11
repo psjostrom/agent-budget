@@ -99,7 +99,7 @@ function scoreFile(file: IndexedFile, taskWords: string[], index: RepoIndex): Ra
 }
 
 function noiseNotes(ranked: Ranked[]): string[] {
-  if (!ranked.length) return ["No strong lexical matches found; use `abg_search` with more specific domain terms."];
+  if (!ranked.length) return ["No strong lexical matches found; use `fl_search` with more specific domain terms."];
   const top = ranked.slice(0, 8);
   const docs = top.filter((r) => fileCategory(r.file.path) === "docs").length;
   const generated = top.filter((r) => fileCategory(r.file.path) === "generated").length;
@@ -109,7 +109,7 @@ function noiseNotes(ranked: Ranked[]): string[] {
   if (docs >= 3) notes.push("Top matches include many docs/spec files; add implementation-specific names or pass a docs-focused task only if documentation is intended.");
   if (generated > 0) notes.push("Generated, demo, fixture, or snapshot files appeared near the top; inspect them only after source files unless the task is fixture-specific.");
   if (tests >= 5) notes.push("Top matches are mostly tests; run or inspect them after identifying the production surface.");
-  if (weak >= 4) notes.push("Several top matches are weak; use `abg_search` with concrete symbols, filenames, API names, or error text.");
+  if (weak >= 4) notes.push("Several top matches are weak; use `fl_search` with concrete symbols, filenames, API names, or error text.");
   return notes.length ? notes : ["Ranking confidence looks reasonable; start with the suggested read order."];
 }
 
@@ -124,7 +124,7 @@ export async function generateDossier(repoRoot: string, task: string, budgetChar
   const suggested = ranked.map((r) => r.file.path);
   const testFiles = ranked.flatMap((r) => (r.file.isTest ? [r.file.path] : r.relatedTests)).filter((v, i, arr) => arr.indexOf(v) === i);
   const lines = [
-    "# Agent Budget Dossier",
+    "# Frontload Dossier",
     "",
     "## Task",
     "",
@@ -168,7 +168,7 @@ export async function generateDossier(repoRoot: string, task: string, budgetChar
     "",
     "## Context limits",
     "",
-    "This dossier intentionally omits raw file contents. Use `abg_read_budgeted` for targeted reads."
+    "This dossier intentionally omits raw file contents. Use `fl_read_budgeted` for targeted reads."
   ];
   const capped = capText(lines.join("\n"), Math.floor(budgetChars * 1.1));
   return { markdown: capped.text, ranked, truncated: capped.truncated };

@@ -1,4 +1,4 @@
-# Agent Budget Proof Report
+# Frontload Proof Report
 
 - Date/time: 2026-06-09T12:33:23.566Z
 - Node: v20.20.2

@@ -16,12 +16,12 @@ describe("e2e proof workflow", () => {
     const index = await buildIndex(fixture);
     const dossier = await generateDossier(fixture, "Fix stale chart tooltip value after sensor reconnect", 12000);
     const calls = [
-      ["abg_policy", { summary: "Current Agent Budget policy." }],
-      ["abg_repo_index", index],
-      ["abg_repo_dossier", dossier],
-      ["abg_read_budgeted", readBudgeted(fixture, "src/chart/ChartTooltip.tsx", 4000, "tooltip reconnect")],
-      ["abg_run_summary", await runSummary(fixture, "test", ["node", "-e", "console.error('FAIL src/chart/ChartTooltip.test.tsx\\nx updates stale chart tooltip value after sensor reconnect'); process.exit(1)"], true)],
-      ["abg_budget_report", budgetReport(fixture)]
+      ["fl_policy", { summary: "Current Frontload policy." }],
+      ["fl_repo_index", index],
+      ["fl_repo_dossier", dossier],
+      ["fl_read_budgeted", readBudgeted(fixture, "src/chart/ChartTooltip.tsx", 4000, "tooltip reconnect")],
+      ["fl_run_summary", await runSummary(fixture, "test", ["node", "-e", "console.error('FAIL src/chart/ChartTooltip.test.tsx\\nx updates stale chart tooltip value after sensor reconnect'); process.exit(1)"], true)],
+      ["fl_budget_report", budgetReport(fixture)]
     ] as const;
     for (const [tool, response] of calls) {
       fs.appendFileSync("proof/mcp-transcript.jsonl", JSON.stringify({ tool, response: { summary: (response as any).summary ?? "ok" } }) + "\n");

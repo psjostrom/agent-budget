@@ -1,13 +1,13 @@
-# Agent Budget for Codex
+# Frontload for Codex
 
-This folder packages Agent Budget as a Codex plugin.
+This folder packages Frontload as a Codex plugin.
 
 It bundles:
 
 - a Codex plugin manifest
-- an Agent Budget skill
+- a Frontload skill
 - an MCP server configuration
-- a launcher that starts the shared Agent Budget CLI MCP server
+- a launcher that starts the shared Frontload CLI MCP server
 
 ## Local Development
 
@@ -21,10 +21,10 @@ pnpm build
 Recommended user install:
 
 ```bash
-agent-budget install codex
+frontload install codex
 ```
 
-This copies the Codex adapter to `~/plugins/agent-budget` and adds it to the
+This copies the Codex adapter to `~/plugins/frontload` and adds it to the
 personal marketplace at `~/.agents/plugins/marketplace.json`. Restart Codex,
 open `/plugins`, choose the Personal marketplace, and install or enable Agent
 Budget.
@@ -39,15 +39,15 @@ dist/src/cli/index.js
 ```
 
 When the adapter is copied away from this repository, the launchers call the
-installed `agent-budget` binary. If the host cannot find it on `PATH`, set:
+installed `frontload` binary. If the host cannot find it on `PATH`, set:
 
 ```bash
-AGENT_BUDGET_CLI=/absolute/path/to/agent-budget
+FRONTLOAD_CLI=/absolute/path/to/frontload
 ```
 
 ## Behavior
 
-When the plugin is enabled, Codex can call Agent Budget MCP tools for:
+When the plugin is enabled, Codex can call Frontload MCP tools for:
 
 - repo indexing
 - task dossiers

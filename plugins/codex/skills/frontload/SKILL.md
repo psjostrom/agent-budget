@@ -1,0 +1,21 @@
+---
+name: frontload
+description: Use when working in a code repository to reduce context cost with Frontload MCP tools, task dossiers, budgeted reads, summarized command output, and token-cost reports.
+---
+
+# Frontload
+
+Use Frontload before broad repository exploration.
+
+Default workflow:
+
+1. Start with `fl_repo_dossier` for the current task.
+2. Use `fl_search` when the dossier says ranking confidence is noisy or when you need concrete symbols.
+3. Use `fl_read_budgeted` for file contents instead of raw full-file reads.
+4. Run tests, typechecks, lint, and build commands through `fl_run_summary`.
+5. Use `fl_git_diff_summary` before reviewing changes.
+6. Use `fl_budget_report` before repeating repair loops.
+
+Avoid raw `find .`, `ls -R`, broad recursive grep, full lockfile dumps, generated fixture dumps, and unwrapped test commands.
+
+If the MCP server is unavailable, ask the user to build Frontload with `pnpm build` and reload the plugin.

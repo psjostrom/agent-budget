@@ -1,13 +1,13 @@
-# Agent Budget for Claude Code
+# Frontload for Claude Code
 
-This folder packages Agent Budget as a Claude Code plugin.
+This folder packages Frontload as a Claude Code plugin.
 
 It bundles:
 
 - a Claude plugin manifest
-- an Agent Budget skill
+- a Frontload skill
 - an MCP server configuration
-- a launcher that starts the shared Agent Budget CLI MCP server
+- a launcher that starts the shared Frontload CLI MCP server
 
 ## Local Development
 
@@ -21,15 +21,15 @@ pnpm build
 Recommended user install:
 
 ```bash
-agent-budget install claude
+frontload install claude
 ```
 
-This copies the Claude Code adapter to `~/.claude/plugins/agent-budget`.
+This copies the Claude Code adapter to `~/.claude/plugins/frontload`.
 
 Then start Claude Code with:
 
 ```bash
-claude --plugin-dir ~/.claude/plugins/agent-budget
+claude --plugin-dir ~/.claude/plugins/frontload
 ```
 
 For local development, test the repo plugin with Claude Code:
@@ -39,17 +39,17 @@ claude --plugin-dir ./plugins/claude
 ```
 
 When the adapter is copied away from this repository, the launchers call the
-installed `agent-budget` binary. If the host cannot find it on `PATH`, set:
+installed `frontload` binary. If the host cannot find it on `PATH`, set:
 
 ```bash
-AGENT_BUDGET_CLI=/absolute/path/to/agent-budget
+FRONTLOAD_CLI=/absolute/path/to/frontload
 ```
 
-Inside Claude Code, use `/mcp` to verify the Agent Budget MCP server is connected.
+Inside Claude Code, use `/mcp` to verify the Frontload MCP server is connected.
 
 ## Behavior
 
-When the plugin is enabled, Claude Code can call Agent Budget MCP tools for:
+When the plugin is enabled, Claude Code can call Frontload MCP tools for:
 
 - repo indexing
 - task dossiers

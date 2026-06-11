@@ -6,9 +6,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/bin/agent-budget-gate",
+            "command": "${CODEX_PLUGIN_ROOT}/bin/frontload-gate",
             "timeout": 10,
-            "statusMessage": "Checking Agent Budget gate"
+            "statusMessage": "Checking Frontload gate"
           }
         ]
       }

@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import fg from "fast-glob";
 import { Project, SyntaxKind } from "ts-morph";
-import { AgentBudgetConfig, loadConfig } from "../config/config.js";
+import { FrontloadConfig, loadConfig } from "../config/config.js";
 import { DependencyEdge, IndexedFile, RepoIndex } from "../types.js";
 import { rel, stateDir } from "../utils/path.js";
 import { words } from "../utils/text.js";
@@ -69,7 +69,7 @@ function resolveImport(from: string, specifier: string, files: Map<string, Index
   return candidates.find((candidate) => files.has(candidate));
 }
 
-export async function buildIndex(repoRoot: string, config: AgentBudgetConfig = loadConfig(repoRoot)): Promise<RepoIndex> {
+export async function buildIndex(repoRoot: string, config: FrontloadConfig = loadConfig(repoRoot)): Promise<RepoIndex> {
   const entries = await fg(["**/*"], {
     cwd: repoRoot,
     dot: true,

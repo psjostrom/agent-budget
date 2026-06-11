@@ -9,13 +9,13 @@ describe("installer", () => {
     const repo = fs.mkdtempSync(path.join(os.tmpdir(), "abg-init-"));
     const result = initProject(repo);
     expect(result.map((write) => path.relative(repo, write.path))).toEqual([
-      "agent-budget.config.json",
+      "frontload.config.json",
       "AGENTS.md",
       "codex/config.toml",
-      ".agent-budget"
+      ".frontload"
     ]);
-    expect(fs.existsSync(path.join(repo, "agent-budget.config.json"))).toBe(true);
-    expect(fs.existsSync(path.join(repo, ".agent-budget"))).toBe(true);
+    expect(fs.existsSync(path.join(repo, "frontload.config.json"))).toBe(true);
+    expect(fs.existsSync(path.join(repo, ".frontload"))).toBe(true);
   });
 
   it("installs the Codex adapter through a personal marketplace", () => {
@@ -24,10 +24,10 @@ describe("installer", () => {
     const marketplaceFile = path.join(home, ".agents/plugins/marketplace.json");
     const marketplace = JSON.parse(fs.readFileSync(marketplaceFile, "utf8"));
 
-    expect(fs.existsSync(path.join(home, "plugins/agent-budget/.codex-plugin/plugin.json"))).toBe(true);
+    expect(fs.existsSync(path.join(home, "plugins/frontload/.codex-plugin/plugin.json"))).toBe(true);
     expect(marketplace.plugins).toContainEqual({
-      name: "agent-budget",
-      source: { source: "local", path: "./plugins/agent-budget" },
+      name: "frontload",
+      source: { source: "local", path: "./plugins/frontload" },
       policy: { installation: "AVAILABLE", authentication: "ON_INSTALL" },
       category: "Productivity"
     });
@@ -39,8 +39,8 @@ describe("installer", () => {
     const home = fs.mkdtempSync(path.join(os.tmpdir(), "abg-home-all-"));
     const result = initAll(repo, ["all"], home);
     expect(result.agents.map((agent) => agent.agent)).toEqual(["codex", "claude"]);
-    expect(fs.existsSync(path.join(home, "plugins/agent-budget/.codex-plugin/plugin.json"))).toBe(true);
-    expect(fs.existsSync(path.join(home, ".claude/plugins/agent-budget/.claude-plugin/plugin.json"))).toBe(true);
+    expect(fs.existsSync(path.join(home, "plugins/frontload/.codex-plugin/plugin.json"))).toBe(true);
+    expect(fs.existsSync(path.join(home, ".claude/plugins/frontload/.claude-plugin/plugin.json"))).toBe(true);
   });
 
   it("parses agent lists", () => {

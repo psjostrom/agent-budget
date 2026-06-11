@@ -3,11 +3,11 @@ import { defaultConfig } from "../../src/config/config.js";
 import { evaluate } from "../../src/gate/gate.js";
 
 describe("PreToolUse gate", () => {
-  it("rewrites simple test commands through agent-budget run", () => {
+  it("rewrites simple test commands through frontload run", () => {
     const result = evaluate({ tool_name: "Bash", tool_input: { command: "pnpm test", description: "run tests" } }, defaultConfig);
     expect(result?.hookSpecificOutput.permissionDecision).toBe("allow");
     expect(result?.hookSpecificOutput.updatedInput).toEqual({
-      command: "agent-budget run --kind test -- pnpm test",
+      command: "frontload run --kind test -- pnpm test",
       description: "run tests"
     });
   });
@@ -21,11 +21,11 @@ describe("PreToolUse gate", () => {
 
   it("rewrites typecheck commands", () => {
     const result = evaluate({ tool_name: "Bash", tool_input: { command: "npx tsc --noEmit" } }, defaultConfig);
-    expect(result?.hookSpecificOutput.updatedInput?.command).toBe("agent-budget run --kind typecheck -- npx tsc --noEmit");
+    expect(result?.hookSpecificOutput.updatedInput?.command).toBe("frontload run --kind typecheck -- npx tsc --noEmit");
   });
 
   it("does not rewrite already budgeted commands", () => {
-    expect(evaluate({ tool_name: "Bash", tool_input: { command: "agent-budget run --kind test -- pnpm test" } }, defaultConfig)).toBeNull();
+    expect(evaluate({ tool_name: "Bash", tool_input: { command: "frontload run --kind test -- pnpm test" } }, defaultConfig)).toBeNull();
   });
 
   it("does not rewrite compound shell commands", () => {
@@ -35,14 +35,14 @@ describe("PreToolUse gate", () => {
   it("denies broad shell dumps", () => {
     const result = evaluate({ tool_name: "Bash", tool_input: { command: "find ." } }, defaultConfig);
     expect(result?.hookSpecificOutput.permissionDecision).toBe("deny");
-    expect(result?.hookSpecificOutput.permissionDecisionReason).toContain("abg_search");
+    expect(result?.hookSpecificOutput.permissionDecisionReason).toContain("fl_search");
   });
 
   it("denies noisy generated and lockfile reads", () => {
     const generated = evaluate({ tool_name: "Read", tool_input: { file_path: "src/__snapshots__/view.snap" } }, defaultConfig);
     const lockfile = evaluate({ tool_name: "Read", tool_input: { file_path: "pnpm-lock.yaml" } }, defaultConfig);
     expect(generated?.hookSpecificOutput.permissionDecision).toBe("deny");
-    expect(lockfile?.hookSpecificOutput.permissionDecisionReason).toContain("abg_read_budgeted");
+    expect(lockfile?.hookSpecificOutput.permissionDecisionReason).toContain("fl_read_budgeted");
   });
 
   it("allows source reads and unknown tools", () => {

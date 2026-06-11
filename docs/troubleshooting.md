@@ -2,11 +2,11 @@
 
 ## Command is not allowed
 
-Add a safe prefix to `commands.allowed` in `agent-budget.config.json`, or use `--allow-unconfigured` for a trusted one-off local run.
+Add a safe prefix to `commands.allowed` in `frontload.config.json`, or use `--allow-unconfigured` for a trusted one-off local run.
 
 ## Dossier is empty
 
-Run `agent-budget index --repo .` first and make the task description include concrete file, domain, or symbol words.
+Run `frontload index --repo .` first and make the task description include concrete file, domain, or symbol words.
 
 ## Codex config key rejected
 
