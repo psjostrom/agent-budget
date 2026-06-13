@@ -18,19 +18,16 @@ pnpm install
 pnpm build
 ```
 
-Recommended user install:
+User setup:
 
 ```bash
-frontload install codex
+npx frontload init
 ```
 
-This copies the Codex adapter to `~/plugins/frontload` and adds it to the
-personal marketplace at `~/.agents/plugins/marketplace.json`. Restart Codex,
-open `/plugins`, choose the Personal marketplace, and install or enable Agent
-Budget.
+Choose Codex when prompted. Init copies the Codex adapter into the expected
+home-directory location and configures it for the installed `frontload` CLI.
 
-For local development, add this plugin through a local Codex marketplace or copy
-it into a personal plugin directory.
+For local development, build the repo and point Codex at this plugin folder.
 
 The MCP launcher expects the built CLI at:
 

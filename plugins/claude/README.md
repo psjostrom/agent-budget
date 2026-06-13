@@ -18,19 +18,14 @@ pnpm install
 pnpm build
 ```
 
-Recommended user install:
+User setup:
 
 ```bash
-frontload install claude
+npx frontload init
 ```
 
-This copies the Claude Code adapter to `~/.claude/plugins/frontload`.
-
-Then start Claude Code with:
-
-```bash
-claude --plugin-dir ~/.claude/plugins/frontload
-```
+Choose Claude Code when prompted. Init copies the Claude Code adapter to
+`~/.claude/plugins/frontload`.
 
 For local development, test the repo plugin with Claude Code:
 

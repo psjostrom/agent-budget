@@ -3,6 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
+import readline from "node:readline/promises";
 import { Command } from "commander";
 import { appendEvent, budgetReport } from "../budget/events.js";
 import { loadConfig } from "../config/config.js";
@@ -12,7 +13,7 @@ import { generateDossier, searchIndex } from "../dossier/dossier.js";
 import { compareCost, gitDiffSummary } from "../diff/diff.js";
 import { buildIndex } from "../indexer/indexer.js";
 import { runPreToolUseHook } from "../gate/entry.js";
-import { initAll, installAgent, parseAgents } from "../install/install.js";
+import { initAll, parseAgents } from "../install/install.js";
 import { startMcp } from "../mcp/server.js";
 import { validateBundledPlugins } from "../plugins/validate.js";
 import { resolveRepo, stateDir } from "../utils/path.js";
@@ -40,26 +41,28 @@ function print(data: unknown): void {
 }
 
 const program = new Command();
-program.name("frontload").description("Local-first context and cost gateway for AI coding agents.").version("0.1.2");
+program.name("frontload").description("Local-first context and cost gateway for AI coding agents.").version("0.1.3");
+
+async function promptAgents(): Promise<ReturnType<typeof parseAgents>> {
+  if (!process.stdin.isTTY || !process.stdout.isTTY) return parseAgents("all");
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  try {
+    const answer = await rl.question("Which agents should Frontload configure? [all/codex/claude/none] (all): " );
+    return parseAgents(answer.trim() || "all");
+  } finally {
+    rl.close();
+  }
+}
 
 program
   .command("init")
   .option("--repo <repo>", "repository root", ".")
-  .option("--agents <agents>", "comma-separated agents to install: codex,claude,all,none", "none")
+  .option("--agents <agents>", "comma-separated agents to configure: codex,claude,all,none")
   .option("--home <dir>", "home directory for agent plugin installation")
   .option("--force")
-  .action((opts) => {
-    print(initAll(resolveRepo(opts.repo), parseAgents(opts.agents), opts.home ? path.resolve(opts.home) : os.homedir(), !!opts.force));
-  });
-
-program
-  .command("install")
-  .argument("<agent>", "agent to install: codex, claude, or all")
-  .option("--home <dir>", "home directory for agent plugin installation")
-  .option("--force")
-  .action((agent, opts) => {
-    if (!["codex", "claude", "all"].includes(agent)) throw new Error(`Unknown agent: ${agent}`);
-    print(installAgent(agent, opts.home ? path.resolve(opts.home) : os.homedir(), !!opts.force));
+  .action(async (opts) => {
+    const agents = opts.agents === undefined ? await promptAgents() : parseAgents(opts.agents);
+    print(initAll(resolveRepo(opts.repo), agents, opts.home ? path.resolve(opts.home) : os.homedir(), !!opts.force));
   });
 
 program.command("doctor").option("--repo <repo>", "repository root", ".").action(async (opts) => {

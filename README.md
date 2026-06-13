@@ -73,7 +73,7 @@ frontload
 In a target repository:
 
 ```bash
-npx frontload init --agents all
+npx frontload init
 frontload doctor
 frontload index --repo .
 frontload dossier "Fix stale chart tooltip value after sensor reconnect" --repo .
@@ -82,9 +82,8 @@ frontload run --repo . --kind test -- pnpm test
 frontload budget --repo .
 ```
 
-If you already installed the package globally, use `frontload init --agents all`.
-Use `--agents codex`, `--agents claude`, or `--agents none` to control which
-agent adapters are installed.
+If you already installed the package globally, use `frontload init`.
+The init command asks which agents to configure. For automation, pass `--agents codex`, `--agents claude`, `--agents all`, or `--agents none`.
 
 Local state is written to `.frontload/` in the target repo:
 
@@ -186,8 +185,8 @@ This is the command to use when you want to prove whether the workflow actually 
 
 ```bash
 frontload init
-frontload init --agents all
 frontload init --agents codex,claude
+frontload init --agents none
 frontload init --force
 ```
 
@@ -201,22 +200,11 @@ current repository:
 
 Without `--force`, existing files are left untouched.
 
-When `--agents` is set, `init` also installs agent adapters:
+`init` then asks which agent adapters to configure:
 
-- `codex`: copies the Codex plugin adapter to `~/plugins/frontload` and
-  adds/updates `~/.agents/plugins/marketplace.json`.
-- `claude`: copies the Claude Code plugin adapter to
-  `~/.claude/plugins/frontload`.
+- `codex`: copies the Codex plugin adapter to `~/plugins/frontload`.
+- `claude`: copies the Claude Code plugin adapter to `~/.claude/plugins/frontload`.
 
-### `install`
-
-```bash
-frontload install codex
-frontload install claude
-frontload install all
-```
-
-Installs or updates agent adapters without changing the current repository.
 Adapters are thin wrappers around the installed `frontload` CLI. Set
 `FRONTLOAD_CLI=/absolute/path/to/frontload` if your agent host cannot find
 the binary on `PATH`.
@@ -437,21 +425,14 @@ plugins/
 The shared implementation still lives in the CLI runtime. Each plugin is a thin
 adapter that launches the installed `frontload` MCP server and hook gate.
 
-Recommended install path:
+Recommended setup path:
 
 ```bash
-npx frontload init --agents all
+npx frontload init
 ```
 
-Codex uses the personal marketplace written to
-`~/.agents/plugins/marketplace.json`; restart Codex, open `/plugins`, choose the
-Personal marketplace, and install or enable Frontload.
-
-Claude Code local test after `frontload install claude`:
-
-```bash
-claude --plugin-dir ~/.claude/plugins/frontload
-```
+The init command asks whether to configure Codex, Claude Code, both, or neither.
+It is the only supported user setup path for agent adapters.
 
 For local development from this repository, build first and point hosts at the
 repo plugin folders:
@@ -460,9 +441,6 @@ repo plugin folders:
 pnpm build
 claude --plugin-dir ./plugins/claude
 ```
-
-The repo also includes `.agents/plugins/marketplace.json` for Codex marketplace
-development against `./plugins/codex`.
 
 Validate both bundled plugins with:
 

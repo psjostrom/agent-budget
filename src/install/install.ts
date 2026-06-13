@@ -22,7 +22,7 @@ export type InitResult = {
   agents: InstallResult[];
 };
 
-type Marketplace = {
+type CodexPluginConfig = {
   name: string;
   interface?: { displayName?: string };
   plugins: Array<{
@@ -88,10 +88,10 @@ function writeJson(file: string, data: unknown): void {
   fs.writeFileSync(file, `${JSON.stringify(data, null, 2)}\n`);
 }
 
-function upsertCodexMarketplace(homeDir: string, force: boolean): WriteResult {
+function upsertCodexPluginConfig(homeDir: string, force: boolean): WriteResult {
   const file = path.join(homeDir, ".agents/plugins/marketplace.json");
   const existed = fs.existsSync(file);
-  const marketplace = readJson<Marketplace>(file, {
+  const codexConfig = readJson<CodexPluginConfig>(file, {
     name: "personal",
     interface: { displayName: "Personal" },
     plugins: []
@@ -102,15 +102,15 @@ function upsertCodexMarketplace(homeDir: string, force: boolean): WriteResult {
     policy: { installation: "AVAILABLE" as const, authentication: "ON_INSTALL" as const },
     category: "Productivity"
   };
-  const existing = marketplace.plugins.findIndex((plugin) => plugin.name === entry.name);
+  const existing = codexConfig.plugins.findIndex((plugin) => plugin.name === entry.name);
   if (existing >= 0) {
-    if (!force && JSON.stringify(marketplace.plugins[existing]) === JSON.stringify(entry)) return { path: file, action: "skipped" };
-    marketplace.plugins[existing] = entry;
-    writeJson(file, marketplace);
+    if (!force && JSON.stringify(codexConfig.plugins[existing]) === JSON.stringify(entry)) return { path: file, action: "skipped" };
+    codexConfig.plugins[existing] = entry;
+    writeJson(file, codexConfig);
     return { path: file, action: "updated" };
   }
-  marketplace.plugins.push(entry);
-  writeJson(file, marketplace);
+  codexConfig.plugins.push(entry);
+  writeJson(file, codexConfig);
   return { path: file, action: existed ? "updated" : "created" };
 }
 
@@ -126,33 +126,33 @@ export function initProject(repoRoot: string, force = false): WriteResult[] {
   return writes;
 }
 
-export function installCodex(homeDir = os.homedir(), force = false): InstallResult {
+function configureCodex(homeDir = os.homedir(), force = false): InstallResult {
   const writes: WriteResult[] = [];
   const root = packageRoot();
   copyDir(path.join(root, "plugins/codex"), path.join(homeDir, "plugins/frontload"), force, writes);
-  writes.push(upsertCodexMarketplace(homeDir, force));
+  upsertCodexPluginConfig(homeDir, force);
   return {
     agent: "codex",
     writes,
-    notes: ["Restart Codex, open /plugins, choose the Personal marketplace, and install or enable Frontload."]
+    notes: ["Restart Codex after init completes; Frontload will be available from the configured local adapter."]
   };
 }
 
-export function installClaude(homeDir = os.homedir(), force = false): InstallResult {
+function configureClaude(homeDir = os.homedir(), force = false): InstallResult {
   const writes: WriteResult[] = [];
   const root = packageRoot();
   copyDir(path.join(root, "plugins/claude"), path.join(homeDir, ".claude/plugins/frontload"), force, writes);
   return {
     agent: "claude",
     writes,
-    notes: ["Start Claude Code with --plugin-dir ~/.claude/plugins/frontload, or add that plugin directory through your Claude Code plugin workflow."]
+    notes: ["Restart Claude Code after init completes; Frontload will be available from the configured local adapter."]
   };
 }
 
-export function installAgent(agent: AgentName | "all", homeDir = os.homedir(), force = false): InstallResult[] {
-  if (agent === "all") return [installCodex(homeDir, force), installClaude(homeDir, force)];
-  if (agent === "codex") return [installCodex(homeDir, force)];
-  if (agent === "claude") return [installClaude(homeDir, force)];
+function configureAgent(agent: AgentName | "all", homeDir = os.homedir(), force = false): InstallResult[] {
+  if (agent === "all") return [configureCodex(homeDir, force), configureClaude(homeDir, force)];
+  if (agent === "codex") return [configureCodex(homeDir, force)];
+  if (agent === "claude") return [configureClaude(homeDir, force)];
   throw new Error(`Unknown agent: ${agent}`);
 }
 
@@ -169,6 +169,6 @@ export function initAll(repoRoot: string, agents: Array<AgentName | "all">, home
   return {
     repoRoot: path.resolve(repoRoot),
     project: initProject(repoRoot, force),
-    agents: agents.flatMap((agent) => installAgent(agent, homeDir, force))
+    agents: agents.flatMap((agent) => configureAgent(agent, homeDir, force))
   };
 }
